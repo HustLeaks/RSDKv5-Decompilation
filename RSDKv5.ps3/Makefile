@@ -100,8 +100,6 @@ LDFLAGS		=	$(MACHDEP) -Wl,-Map,$(notdir $@).map
 #---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project
 #---------------------------------------------------------------------------------
-# $(shell /usr/local/ps3dev/portlibs/ppu/bin/sdl2-config --libs)
-#LIBS	:=	 -L/usr/local/ps3dev/portlibs/ppu/lib -lSDL2_mixer -lSDL2 -lrsx -lgcm_sys -lio -lsysutil -laudio -lrt -llv2 -ldbglogger -lnet -lsysmodule -lFLAC -logg -lvorbis -lvorbisfile -lmikmod -lmad -ltheora -lm
 LIBS	:=	$(shell /usr/local/ps3dev/portlibs/ppu/bin/sdl2-config --libs) $(shell pkg-config --libs theora) -ldbglogger -lnet -lsysutil -lsysmodule
 
 #---------------------------------------------------------------------------------
@@ -130,7 +128,7 @@ export BUILDDIR	:=	$(CURDIR)/$(BUILD)
 # automatically build a list of object files for our project
 #---------------------------------------------------------------------------------
 CFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.c)))
-CPPFILES	:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.cpp)))
+CPPFILES	:=	$(foreach dir,$(SOURCES),$(notdir $(filter-out xmltest.cpp, $(wildcard $(dir)/*.cpp))))
 sFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
 SFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.S)))
 BINFILES	:=	$(foreach dir,$(DATA),$(notdir $(wildcard $(dir)/*.*)))
