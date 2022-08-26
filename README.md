@@ -9,6 +9,8 @@ Once you're done installing them, go to RSDKv5.ps3 and run the Makefile. After y
 * Try to get better performance on special stages.
 * Make the game not crash the console when quitting out.
 
+This port contains the big endian fixes from [Radfordhound's Wii U port](https://github.com/Radfordhound/RSDKv5-Decompilation).
+
 Original README below.
 
 ![header](https://user-images.githubusercontent.com/29069561/183143615-d7f77921-13cf-4c58-8c5f-6a1e76ea20e2.svg)
