@@ -33,7 +33,7 @@ SOURCES		:=	\
 	../dependencies/all/tinyxml2 		\
 	../dependencies/all/iniparser 	\
 	../dependencies/all/miniz   \
-	../../../SonicManiaPS3/ \
+	../../../SonicMania/ \
 	../../../SonicMania/Objects
 DATA		:=	data
 INCLUDES	:=	\
@@ -127,8 +127,8 @@ export BUILDDIR	:=	$(CURDIR)/$(BUILD)
 #---------------------------------------------------------------------------------
 # automatically build a list of object files for our project
 #---------------------------------------------------------------------------------
-CFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.c)))
-CPPFILES	:=	$(foreach dir,$(SOURCES),$(notdir $(filter-out xmltest.cpp, $(wildcard $(dir)/*.cpp))))
+CFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(subst PublicFunctions.c,,${wildcard $(dir)/*.c})))
+CPPFILES	:=	$(foreach dir,$(SOURCES),$(notdir $(subst xmltest.cpp,,${wildcard $(dir)/*.cpp})))
 sFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
 SFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.S)))
 BINFILES	:=	$(foreach dir,$(DATA),$(notdir $(wildcard $(dir)/*.*)))
