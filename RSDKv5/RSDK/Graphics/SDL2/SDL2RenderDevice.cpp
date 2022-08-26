@@ -43,6 +43,11 @@ bool RenderDevice::Init()
     videoSettings.windowWidth  = 1920;
     videoSettings.windowHeight = 1080;
     flags |= SDL_WINDOW_FULLSCREEN;
+#elif RETRO_PLATFORM == RETRO_PS3
+    videoSettings.windowed     = false;
+    videoSettings.windowWidth  = 1280;
+    videoSettings.windowHeight = 720;
+    flags |= SDL_WINDOW_FULLSCREEN;
 #endif
 
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
@@ -108,7 +113,13 @@ void RenderDevice::FlipScreen()
 
     // Clear the screen. This is needed to keep the
     // pillarboxes in fullscreen from displaying garbage data.
+    // PS3 PORT NOTE: alright motherfuckers so i decided to
+    // not do this for now as a workaround to an issue
+    // with vblank blah blah blah go join rems
+    // you bastard
+#if RETRO_PLATFORM != RETRO_PS3
     SDL_RenderClear(renderer);
+#endif
 
 #if (SDL_COMPILEDVERSION >= SDL_VERSIONNUM(2, 0, 18))
     int32 startVert = 0;
@@ -388,21 +399,52 @@ void RenderDevice::RefreshWindow()
     videoSettings.windowState = WINDOWSTATE_ACTIVE;
 }
 
+#if RETRO_PLATFORM == RETRO_PS3
+#include <rsx/rsx.h>
+
+bool hasWaitedForVBlank = true;
+
+void RenderDevice::PS3_VBlank(unsigned int fart)
+{
+    curTicks = gcmGetVBlankCount() * 10;
+    if (curTicks >= prevTicks + targetFreq) {
+        hasWaitedForVBlank = true;
+        prevTicks = curTicks; 
+    }
+    else {
+        hasWaitedForVBlank = false;
+    }
+}
+#endif
+
 void RenderDevice::InitFPSCap()
 {
     targetFreq = SDL_GetPerformanceFrequency() / videoSettings.refreshRate;
     curTicks   = 0;
     prevTicks  = 0;
+#if RETRO_PLATFORM == RETRO_PS3
+    gcmSetVBlankHandler(RenderDevice::PS3_VBlank);
+#endif
 }
+
 bool RenderDevice::CheckFPSCap()
 {
+#if RETRO_PLATFORM == RETRO_PS3
+    return hasWaitedForVBlank;
+#else
     curTicks = SDL_GetPerformanceCounter();
     if (curTicks >= prevTicks + targetFreq)
         return true;
 
     return false;
+#endif
 }
-void RenderDevice::UpdateFPSCap() { prevTicks = curTicks; }
+void RenderDevice::UpdateFPSCap() 
+{ 
+#if RETRO_PLATFORM != RETRO_PS3
+    prevTicks = curTicks; 
+#endif
+}
 
 void RenderDevice::InitVertexBuffer()
 {

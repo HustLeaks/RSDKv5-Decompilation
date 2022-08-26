@@ -122,7 +122,11 @@ bool32 RSDK::LoadDataPack(const char *filePath, size_t fileOffset, bool32 useBuf
     FileInfo info;
 
     char dataPackPath[0x100];
+#if RETRO_PLATFORM == RETRO_PS3
+    sprintf_s(dataPackPath, (int32)sizeof(dataPackPath), "%s", filePath);
+#else
     sprintf_s(dataPackPath, (int32)sizeof(dataPackPath), "%s%s", SKU::userFileDir, filePath);
+#endif
 
     InitFileInfo(&info);
     info.externalFile = true;
@@ -251,14 +255,19 @@ bool32 RSDK::LoadFile(FileInfo *info, const char *filename, uint8 fileMode)
     char fullFilePath[0x100];
     strcpy(fullFilePath, filename);
 
+#if RETRO_PLATFORM == RETRO_PS3
+    bool32 addPath = true;
+#else
+    bool32 addPath = false;
+#endif
+
 #if RETRO_USE_MOD_LOADER
     char pathLower[0x100];
     memset(pathLower, 0, sizeof(char) * 0x100);
     for (int32 c = 0; c < strlen(filename); ++c) {
         pathLower[c] = tolower(filename[c]);
     }
-
-    bool32 addPath = false;
+    
     if (modSettings.activeMod != -1) {
         char buf[0x100];
         sprintf_s(buf, (int32)sizeof(buf), "%s", fullFilePath);
@@ -293,7 +302,7 @@ bool32 RSDK::LoadFile(FileInfo *info, const char *filename, uint8 fileMode)
 #endif
 #endif
 
-#if RETRO_PLATFORM == RETRO_OSX || RETRO_PLATFORM == RETRO_ANDROID
+#if RETRO_PLATFORM == RETRO_OSX || RETRO_PLATFORM == RETRO_ANDROID || RETRO_PLATFORM == RETRO_PS3
     if (addPath) {
         char pathBuf[0x100];
         sprintf_s(pathBuf, (int32)sizeof(pathBuf), "%s%s", SKU::userFileDir, fullFilePath);
@@ -332,6 +341,8 @@ bool32 RSDK::LoadFile(FileInfo *info, const char *filename, uint8 fileMode)
 
 void RSDK::GenerateELoadKeys(FileInfo *info, const char *key1, int32 key2)
 {
+    // contains big endian fixes from Radfordhound's wii u port
+
     uint8 hash[0x10];
     char hashBuffer[0x400];
 
@@ -340,10 +351,17 @@ void RSDK::GenerateELoadKeys(FileInfo *info, const char *key1, int32 key2)
     GEN_HASH_MD5_BUFFER(hashBuffer, (uint32 *)hash);
 
     for (int32 y = 0; y < 0x10; y += 4) {
+#if RETRO_BIG_ENDIAN
+        info->encryptionKeyA[y + 3] = hash[y + 3];
+        info->encryptionKeyA[y + 2] = hash[y + 2];
+        info->encryptionKeyA[y + 1] = hash[y + 1];
+        info->encryptionKeyA[y + 0] = hash[y + 0];
+#else
         info->encryptionKeyA[y + 3] = hash[y + 0];
         info->encryptionKeyA[y + 2] = hash[y + 1];
         info->encryptionKeyA[y + 1] = hash[y + 2];
         info->encryptionKeyA[y + 0] = hash[y + 3];
+#endif
     }
 
     // KeyB
@@ -351,10 +369,17 @@ void RSDK::GenerateELoadKeys(FileInfo *info, const char *key1, int32 key2)
     GEN_HASH_MD5_BUFFER(hashBuffer, (uint32 *)hash);
 
     for (int32 y = 0; y < 0x10; y += 4) {
+#if RETRO_BIG_ENDIAN
+        info->encryptionKeyB[y + 3] = hash[y + 3];
+        info->encryptionKeyB[y + 2] = hash[y + 2];
+        info->encryptionKeyB[y + 1] = hash[y + 1];
+        info->encryptionKeyB[y + 0] = hash[y + 0];
+#else
         info->encryptionKeyB[y + 3] = hash[y + 0];
         info->encryptionKeyB[y + 2] = hash[y + 1];
         info->encryptionKeyB[y + 1] = hash[y + 2];
         info->encryptionKeyB[y + 0] = hash[y + 3];
+#endif
     }
 }
 

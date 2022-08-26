@@ -70,7 +70,15 @@ enum GameRegions {
 #endif
 
 #ifndef RETRO_STANDALONE
+#ifdef __PS3__
+#define RETRO_STANDALONE (0)
+#else
 #define RETRO_STANDALONE (1)
+#endif
+#endif
+
+#if defined(__BYTE_ORDER__) && (__BYTE_ORDER__ == __ORDER_BIG_ENDIAN__)
+#define RETRO_BIG_ENDIAN (1)
 #endif
 
 // ============================
@@ -86,6 +94,7 @@ enum GameRegions {
 #define RETRO_iOS     (6)
 #define RETRO_ANDROID (7)
 #define RETRO_UWP     (8)
+#define RETRO_PS3     (9)
 
 // ============================
 // PLATFORMS (used mostly in legacy but could come in handy here)
@@ -137,6 +146,9 @@ enum GameRegions {
 #elif defined __linux__
 #define RETRO_PLATFORM   (RETRO_LINUX)
 #define RETRO_DEVICETYPE (RETRO_STANDARD)
+#elif defined __PS3__
+#define RETRO_PLATFORM   (RETRO_PS3)
+#define RETRO_DEVICETYPE (RETRO_STANDARD)
 #else
 #define RETRO_PLATFORM   (RETRO_WIN)
 #define RETRO_DEVICETYPE (RETRO_STANDARD)
@@ -153,7 +165,11 @@ enum GameRegions {
 #define SCREEN_CENTERY (SCREEN_YSIZE / 2)
 
 #ifndef BASE_PATH
+#if RETRO_PLATFORM == RETRO_PS3
+#define BASE_PATH "/dev_usb000/SonicMania/"
+#else
 #define BASE_PATH ""
+#endif
 #endif
 
 // ============================
@@ -227,7 +243,11 @@ enum GameRegions {
 
 // enables the use of the mod loader
 #ifndef RETRO_USE_MOD_LOADER
+#if RETRO_PLATFORM == RETRO_PS3
+#define RETRO_USE_MOD_LOADER (0)
+#else
 #define RETRO_USE_MOD_LOADER (!RETRO_USE_ORIGINAL_CODE && 1)
+#endif
 #endif
 
 // defines the version of the mod loader, this should be changed ONLY if the ModFunctionTable is updated in any way
@@ -380,6 +400,17 @@ enum GameRegions {
 #undef RETRO_INPUTDEVICE_SDL2
 #define RETRO_INPUTDEVICE_SDL2 (1)
 
+#elif RETRO_PLATFORM == RETRO_PS3
+
+#undef RETRO_RENDERDEVICE_SDL2
+#define RETRO_RENDERDEVICE_SDL2 (1)
+
+#undef RETRO_AUDIODEVICE_SDL2
+#define RETRO_AUDIODEVICE_SDL2 (1)
+
+#undef RETRO_INPUTDEVICE_SDL2
+#define RETRO_INPUTDEVICE_SDL2 (1)
+
 #endif
 
 #if RETRO_PLATFORM == RETRO_WIN || RETRO_PLATFORM == RETRO_UWP
@@ -474,6 +505,11 @@ enum GameRegions {
 #include <theora/theoradec.h>
 
 #undef RETRO_USING_MOUSE
+
+#elif RETRO_PLATFORM == RETRO_PS3
+#include <SDL2/SDL.h>
+
+#include <theora/theoradec.h>
 #endif
 
 // ============================

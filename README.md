@@ -1,3 +1,16 @@
+# **About this fork**
+This fork contains a PlayStation 3 port of the game. To compile it, you need [ps3toolchain](https://github.com/ps3dev/ps3toolchain) and the [SDL2 port](https://github.com/ultra0000/PS3-SDL2).
+Once you're done installing them, go to RSDKv5.ps3 and run the Makefile. After you're done compiling it, put the game data in a folder called SonicMania on a USB drive (At the moment i can't get a normal Data.rsdk file to work so you'll have to extract it to a folder simply called Data), then plug it to your PS3's right USB port. If you have more than 2 USB ports, i do not know which one is dev_usb000 so you'll have to look in MultiMan which one is it. Speaking of MultiMan, you might want to use it to run the .self executable.
+
+# **TODOs**
+* For some reason, the game starts to lag really badly after running for a while.
+* Fix audio so that it doesn't break your ears.
+* Fix input, for some reason it's only reading the keyboard when plugged in to the console and it only accepts one key at a time.
+* Try to get better performance on special stages.
+* Make the game not crash the console when quitting out.
+
+Original README below.
+
 ![header](https://user-images.githubusercontent.com/29069561/183143615-d7f77921-13cf-4c58-8c5f-6a1e76ea20e2.svg)
 
 A complete decompilation of Retro Engine v5 and v5Ultimate.

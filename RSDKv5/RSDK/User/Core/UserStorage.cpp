@@ -1162,6 +1162,9 @@ void RSDK::SKU::InitUserDirectory()
 #elif RETRO_PLATFORM == RETRO_LINUX
 
     SKU::SetUserFileCallbacks("./", NULL, NULL);
+#elif RETRO_PLATFORM == RETRO_PS3
+
+    SKU::SetUserFileCallbacks("/dev_usb000/SonicMania/", NULL, NULL);
 
 #else
 

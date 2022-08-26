@@ -151,11 +151,14 @@ void DummyLeaderboards::TrackScore(LeaderboardID *leaderboard, int32 score, void
     if (!leaderboard)
         return;
 
+// errors out 
+#if RETRO_PLATFORM != RETRO_PS3
     std::string str = __FILE__;
     str += ": TrackScore() # TrackScore ";
     str += std::to_string(score);
     str += " \r\n";
     PrintLog(PRINT_NORMAL, str.c_str());
+#endif
 
     DummyLeaderboardCallback *cb = callbackList.Append();
     cb->type                     = 2;
