@@ -5,13 +5,26 @@ padData paddata;
 
 padData oldpaddata;
 
-#define CheckPS3Button( btn, key, controllernum) \
+// contains a workaround, similar to the one found 
+// in saturn's 3ds port.
+#define CheckPS3Button( btn, key ) \
 	if( paddata.btn != oldpaddata.btn) {\
-		if( paddata.btn == 0) \
-		controller[controllernum].key.press = false; \
-		else \
-		controller[controllernum].key.press = true; \
-	} \
+		if( paddata.btn == 0) {\
+		    controller[CONT_P1].key.press = false; \
+		    controller[CONT_ANY].key.press = false; \
+		} else {\
+		    controller[CONT_P1].key.press = true; \
+		    controller[CONT_ANY].key.press = true; \
+        } \
+	} else { \
+		if( paddata.btn == 0) {\
+		    controller[CONT_P1].key.press = false; \
+		    controller[CONT_ANY].key.press = false; \
+		} else {\
+		    controller[CONT_P1].key.press = true; \
+		    controller[CONT_ANY].key.press = true; \
+        } \
+    } \
 	oldpaddata.btn = paddata.btn;
 
 using namespace RSDK::SKU;
@@ -27,16 +40,16 @@ void InputDevicePS3::ProcessInput(int32 controllerID)
     ioPadGetInfo(&padinfo);
     ioPadGetData(0, &paddata);
 
-    CheckPS3Button(BTN_UP, keyUp, controllerID);
-    CheckPS3Button(BTN_DOWN, keyDown, controllerID);
-    CheckPS3Button(BTN_LEFT, keyLeft, controllerID);
-    CheckPS3Button(BTN_RIGHT, keyRight, controllerID);
-    CheckPS3Button(BTN_CROSS, keyA, controllerID);
-    CheckPS3Button(BTN_CIRCLE, keyB, controllerID);
-    CheckPS3Button(BTN_SQUARE, keyX, controllerID);
-    CheckPS3Button(BTN_TRIANGLE, keyY, controllerID);
-    CheckPS3Button(BTN_START, keyStart, controllerID);
-    CheckPS3Button(BTN_SELECT, keySelect, controllerID);
+    CheckPS3Button(BTN_UP, keyUp);
+    CheckPS3Button(BTN_DOWN, keyDown);
+    CheckPS3Button(BTN_LEFT, keyLeft);
+    CheckPS3Button(BTN_RIGHT, keyRight);
+    CheckPS3Button(BTN_CROSS, keyA);
+    CheckPS3Button(BTN_CIRCLE, keyB);
+    CheckPS3Button(BTN_SQUARE, keyX);
+    CheckPS3Button(BTN_TRIANGLE, keyY);
+    CheckPS3Button(BTN_START, keyStart);
+    CheckPS3Button(BTN_SELECT, keySelect);
 }
 
 void InputDevicePS3::CloseDevice()
@@ -48,9 +61,7 @@ void InputDevicePS3::CloseDevice()
 
 RSDK::SKU::InputDevicePS3 *RSDK::SKU::InitPS3InputDevice(uint8 controllerID)
 {
-    uint32 id = 1;
-
-    if (inputDeviceCount >= INPUTDEVICE_COUNT)
+    if (inputDeviceCount == INPUTDEVICE_COUNT)
         return NULL;
 
     if (inputDeviceList[inputDeviceCount] && inputDeviceList[inputDeviceCount]->active)
@@ -68,10 +79,10 @@ RSDK::SKU::InputDevicePS3 *RSDK::SKU::InitPS3InputDevice(uint8 controllerID)
     device->active      = true;
     device->disabled    = false;
     device->gamepadType = (DEVICE_API_PS3 << 16) | (DEVICE_TYPE_CONTROLLER << 8) | (controllerType << 0);
-    device->id          = id;
+    device->id          = controllerID;
 
     for (int32 i = 0; i < PLAYER_COUNT; ++i) {
-        if (inputSlots[i] == id) {
+        if (inputSlots[i] == controllerID) {
             inputSlotDevices[i] = device;
             device->isAssigned  = true;
         }
@@ -84,4 +95,5 @@ RSDK::SKU::InputDevicePS3 *RSDK::SKU::InitPS3InputDevice(uint8 controllerID)
 void RSDK::SKU::InitPS3InputAPI()
 {
     ioPadInit(7);
+    SKU::InitPS3InputDevice(CONT_ANY);
 }

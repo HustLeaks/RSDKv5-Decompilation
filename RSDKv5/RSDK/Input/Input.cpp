@@ -138,7 +138,6 @@ void RSDK::InitInputDevices()
 
 #if RETRO_INPUTDEVICE_PS3
     SKU::InitPS3InputAPI();
-    SKU::InitPS3InputDevice(CONT_ANY);
 #endif
 }
 
