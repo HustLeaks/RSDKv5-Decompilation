@@ -95,5 +95,5 @@ RSDK::SKU::InputDevicePS3 *RSDK::SKU::InitPS3InputDevice(uint8 controllerID)
 void RSDK::SKU::InitPS3InputAPI()
 {
     ioPadInit(7);
-    SKU::InitPS3InputDevice(CONT_ANY);
+    SKU::InitPS3InputDevice(CONT_P1);
 }
