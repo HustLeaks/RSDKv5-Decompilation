@@ -1,6 +1,6 @@
 # **About this fork**
 This fork contains a PlayStation 3 port of the game. To compile it, you need [ps3toolchain](https://github.com/ps3dev/ps3toolchain) and the [SDL2 port](https://github.com/ultra0000/PS3-SDL2).
-Once you're done installing them, go to RSDKv5.ps3, export PKG_CONFIG_PATH to /usr/local/ps3dev/ppu/lib/pkgconfig/ and run the Makefile. After you're done compiling it, put the game data in a folder called SonicMania on a USB drive (At the moment i can't get a normal Data.rsdk file to work so you'll have to extract it to a folder simply called Data), then plug it in to your PS3's right USB port. If you have more than 2 USB ports, i do not know which one is dev_usb000 so you'll have to look in MultiMan which one is it. Speaking of MultiMan, you might want to use it to run the .self executable.
+Once you're done installing them, go to RSDKv5.ps3, export PKG_CONFIG_PATH to /usr/local/ps3dev/portlibs/ppu/lib/pkgconfig/ and run the Makefile. After you're done compiling it, put the game data in a folder called SonicMania on a USB drive (At the moment i can't get a normal Data.rsdk file to work so you'll have to extract it to a folder simply called Data), then plug it in to your PS3's right USB port. If you have more than 2 USB ports, i do not know which one is dev_usb000 so you'll have to look in MultiMan which one is it. Speaking of MultiMan, you might want to use it to run the .self executable.
 
 # **TODOs**
 * For some reason, the game starts to lag really badly after running for a while.
