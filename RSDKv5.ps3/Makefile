@@ -9,7 +9,8 @@ endif
 
 include $(PSL1GHT)/ppu_rules
 
-PKG_CONFIG_PATH=/usr/local/ps3dev/portlibs/ppu/lib/pkgconfig/
+# need to firgure this shit out
+#PKG_CONFIG_PATH=/usr/local/ps3dev/portlibs/ppu/lib/pkgconfig/
 
 #---------------------------------------------------------------------------------
 # TARGET is the name of the output
@@ -100,7 +101,7 @@ LDFLAGS		=	$(MACHDEP) -Wl,-Map,$(notdir $@).map
 #---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project
 #---------------------------------------------------------------------------------
-LIBS	:=	$(shell /usr/local/ps3dev/portlibs/ppu/bin/sdl2-config --libs) $(shell pkg-config --libs theora) -ldbglogger -lnet -lsysutil -lsysmodule
+LIBS	:=	$(shell /usr/local/ps3dev/portlibs/ppu/bin/sdl2-config --libs) $(shell pkg-config --libs theora) -lnet -lsysutil -lsysmodule
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
