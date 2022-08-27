@@ -204,6 +204,7 @@ enum GameRegions {
 #define RETRO_INPUTDEVICE_SDL2   (0)
 #define RETRO_INPUTDEVICE_GLFW   (0)
 #define RETRO_INPUTDEVICE_PDBOAT (0)
+#define RETRO_INPUTDEVICE_PS3    (0)
 
 // ============================
 // USER CORE BACKENDS
@@ -408,8 +409,8 @@ enum GameRegions {
 #undef RETRO_AUDIODEVICE_SDL2
 #define RETRO_AUDIODEVICE_SDL2 (1)
 
-#undef RETRO_INPUTDEVICE_SDL2
-#define RETRO_INPUTDEVICE_SDL2 (1)
+#undef RETRO_INPUTDEVICE_PS3
+#define RETRO_INPUTDEVICE_PS3 (1)
 
 #endif
 

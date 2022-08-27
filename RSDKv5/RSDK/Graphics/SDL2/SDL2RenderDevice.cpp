@@ -751,7 +751,9 @@ void RenderDevice::ProcessEvent(SDL_Event event)
             sprintf_s(idBuffer, (int32)sizeof(idBuffer), "%s%d", "SDLDevice", event.cdevice.which);
             GenerateHashCRC(&id, idBuffer);
 
+#if RETRO_PLATFORM != RETRO_PS3
             SKU::InitSDL2InputDevice(id, event.cdevice.which);
+#endif
             break;
         }
 
