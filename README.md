@@ -5,7 +5,7 @@ Once you're done installing them, go to RSDKv5.ps3 and run the Makefile. After y
 # **TODOs**
 * For some reason, the game starts to lag really badly after running for a while.
 * Fix audio so that it doesn't break your ears.
-* Fix input, for some reason it doesn't work in stages and the Dev Menu doesn't open either.
+* Properly fix input, it currently uses a workaround.
 * Try to get better performance on special stages.
 * Make the game not crash the console when quitting out.
 
