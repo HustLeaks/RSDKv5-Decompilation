@@ -233,6 +233,9 @@ char RSDK::drawGroupNames[0x10][0x10] = {
 
 void RSDK::RenderDeviceBase::ProcessDimming()
 {
+// this is a fix to the issue where the game would start to
+// slow down badly.
+#if RETRO_PLATFORM != RETRO_PS3
     // Bug Details:
     // if you've ever used debug mode before the first frame of v5 executes you may've seen how the game starts dimmed
     // this is because dimLimit hasn't been initialized yet, so it starts at 0. Likewise, the timer also starts at 0
@@ -252,6 +255,7 @@ void RSDK::RenderDeviceBase::ProcessDimming()
         if (videoSettings.dimPercent > 0.25)
             videoSettings.dimPercent *= 0.9f;
     }
+#endif
 }
 
 void RSDK::GenerateBlendLookupTable()
