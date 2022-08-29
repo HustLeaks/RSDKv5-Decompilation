@@ -3,11 +3,12 @@ This fork contains a PlayStation 3 port of the game. To compile it, you need [ps
 Once you're done installing them, go to RSDKv5.ps3, export PKG_CONFIG_PATH to /usr/local/ps3dev/portlibs/ppu/lib/pkgconfig/ and run the Makefile. After you're done compiling it, put the game data in a folder called SonicMania on a USB drive (At the moment i can't get a normal Data.rsdk file to work so you'll have to extract it to a folder simply called Data), then plug it in to your PS3's right USB port. If you have more than 2 USB ports, i do not know which one is dev_usb000 so you'll have to look in MultiMan which one is it. Speaking of MultiMan, you might want to use it to run the .self executable.
 
 # **TODOs**
-* ~~For some reason, the game starts to lag really badly after running for a while.~~ FIXED.
+* Make Data.rsdk files actually work instead of having to extract them manually.
 * Fix audio so that it doesn't break your ears.
 * Properly fix input, it currently uses a workaround.
 * Try to get better performance on special stages.
 * Make the game not crash the console when quitting out.
+* ~~For some reason, the game starts to lag really badly after running for a while.~~ FIXED.
 
 This port contains the big endian fixes from [Radfordhound's Wii U port](https://github.com/Radfordhound/RSDKv5-Decompilation).
 
