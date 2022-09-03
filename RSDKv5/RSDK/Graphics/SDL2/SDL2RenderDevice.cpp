@@ -337,7 +337,7 @@ void RenderDevice::Release(bool32 isRefresh)
         SDL_DestroyWindow(window);
 
     if (!isRefresh)
-        SDL_Quit();
+        SDL_QuitSubSystem(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
 
     if (!isRefresh) {
         if (scanlines)
