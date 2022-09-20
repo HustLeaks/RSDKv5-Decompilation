@@ -766,7 +766,8 @@ void RenderDevice::ProcessEvent(SDL_Event event)
                 GenerateHashCRC(&id, idBuffer);
 
 #if RETRO_PLATFORM != RETRO_PS3
-                SKU::InitSDL2InputDevice(id, game_controller);
+                if (SKU::InitSDL2InputDevice(id, game_controller) == NULL)
+                    SDL_GameControllerClose(game_controller);
 #endif
             }
 
