@@ -534,7 +534,6 @@ void RSDK::LoadSceneAssets()
                 uint8 tempBuffer[0x10];
                 for (int32 v = 1; v < varCount; ++v) {
                     switch (varList[v].type) {
-                        // big endian fixes from Radfordhound's wii u port
                         case VAR_UINT8:
                         case VAR_INT8:
                             if (varList[v].active)

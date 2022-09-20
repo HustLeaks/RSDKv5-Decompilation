@@ -1,5 +1,3 @@
-// contains big endian fixes from Radfordhound's wii u port
-
 #include "RSDK/Core/RetroEngine.hpp"
 
 #if RETRO_REV0U
