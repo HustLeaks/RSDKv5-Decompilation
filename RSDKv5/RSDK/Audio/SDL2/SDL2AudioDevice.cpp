@@ -20,14 +20,20 @@ bool32 AudioDevice::Init()
     want.callback = AudioCallback;
 
     audioState = false;
+
+// error: 'SDL_AUDIO_ALLOW_SAMPLES_CHANGE' was not declared in this scope
+#if RETRO_PLATFORM != RETRO_PS3
     if ((device = SDL_OpenAudioDevice(nullptr, 0, &want, &deviceSpec, SDL_AUDIO_ALLOW_SAMPLES_CHANGE)) > 0) {
+#endif
         SDL_PauseAudioDevice(device, SDL_FALSE);
         audioState = true;
+#if RETRO_PLATFORM != RETRO_PS3
     }
     else {
         PrintLog(PRINT_NORMAL, "ERROR: Unable to open audio device!");
         PrintLog(PRINT_NORMAL, "ERROR: %s", SDL_GetError());
     }
+#endif
 
     return true;
 }

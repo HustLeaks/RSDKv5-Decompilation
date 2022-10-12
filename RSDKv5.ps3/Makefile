@@ -93,7 +93,7 @@ EXTRA_OFLAGS = -fthread-jumps \
 -fsched-interblock  -fsched-spec \
 -fschedule-insns  
 
-CFLAGS		=	-O1 $(EXTRA_OFLAGS) -Wall -mcpu=cell $(MACHDEP) $(INCLUDE) -D__PS3__ -DRSDK_AUTOBUILD -I/usr/local/ps3dev/portlibs/ppu/include -I/usr/local/ps3dev/portlibs/ppu/include/SDL2
+CFLAGS		=	-g3 -O1 $(EXTRA_OFLAGS) -Wall -mcpu=cell $(MACHDEP) $(INCLUDE) -D__PS3__ -DRSDK_AUTOBUILD -I/usr/local/ps3dev/portlibs/ppu/include -I/usr/local/ps3dev/portlibs/ppu/include/SDL2
 CXXFLAGS	=	$(CFLAGS)
 
 LDFLAGS		=	$(MACHDEP) -Wl,-Map,$(notdir $@).map
