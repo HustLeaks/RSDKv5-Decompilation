@@ -127,6 +127,56 @@ void RSDK::InitModAPI()
     ADD_MOD_FUNCTION(ModTable_HandleRunState_HighPriority, HandleRunState_HighPriority);
     ADD_MOD_FUNCTION(ModTable_HandleRunState_LowPriority, HandleRunState_LowPriority);
 
+#if RETRO_MOD_LOADER_VER >= 2
+    // Mod Settings (Part 2)
+    ADD_MOD_FUNCTION(ModTable_ForeachSetting, ForeachSetting);
+    ADD_MOD_FUNCTION(ModTable_ForeachSettingCategory, ForeachSettingCategory);
+
+    // Files
+    ADD_MOD_FUNCTION(ModTable_ExcludeFile, ExcludeFile);
+    ADD_MOD_FUNCTION(ModTable_ExcludeAllFiles, ExcludeAllFiles);
+    ADD_MOD_FUNCTION(ModTable_ReloadFile, ReloadFile);
+    ADD_MOD_FUNCTION(ModTable_ReloadAllFiles, ReloadAllFiles);
+
+    // Graphics
+    ADD_MOD_FUNCTION(ModTable_GetSpriteAnimation, GetSpriteAnimation);
+    ADD_MOD_FUNCTION(ModTable_GetSpriteSurface, GetSpriteSurface);
+    ADD_MOD_FUNCTION(ModTable_GetPaletteBank, GetPaletteBank);
+    ADD_MOD_FUNCTION(ModTable_GetActivePaletteBuffer, GetActivePaletteBuffer);
+    ADD_MOD_FUNCTION(ModTable_GetRGB32To16Buffer, GetRGB32To16Buffer);
+    ADD_MOD_FUNCTION(ModTable_GetBlendLookupTable, GetBlendLookupTable);
+    ADD_MOD_FUNCTION(ModTable_GetSubtractLookupTable, GetSubtractLookupTable);
+    ADD_MOD_FUNCTION(ModTable_GetTintLookupTable, GetTintLookupTable);
+    ADD_MOD_FUNCTION(ModTable_GetMaskColor, GetMaskColor);
+    ADD_MOD_FUNCTION(ModTable_GetScanEdgeBuffer, GetScanEdgeBuffer);
+    ADD_MOD_FUNCTION(ModTable_GetCamera, GetCamera);
+    ADD_MOD_FUNCTION(ModTable_GetShader, GetShader);
+    ADD_MOD_FUNCTION(ModTable_GetModel, GetModel);
+    ADD_MOD_FUNCTION(ModTable_GetScene3D, GetScene3D);
+    ADD_MOD_FUNCTION(ModTable_DrawDynamicAniTile, DrawDynamicAniTile);
+
+    // Audio
+    ADD_MOD_FUNCTION(ModTable_GetSfx, GetSfxEntry);
+    ADD_MOD_FUNCTION(ModTable_GetChannel, GetChannel);
+
+    // Objects/Entities
+    ADD_MOD_FUNCTION(ModTable_GetGroupEntities, GetGroupEntities);
+
+    // Collision
+    ADD_MOD_FUNCTION(ModTable_SetPathGripSensors, SetPathGripSensors);
+    ADD_MOD_FUNCTION(ModTable_FloorCollision, FloorCollision);
+    ADD_MOD_FUNCTION(ModTable_LWallCollision, LWallCollision);
+    ADD_MOD_FUNCTION(ModTable_RoofCollision, RoofCollision);
+    ADD_MOD_FUNCTION(ModTable_RWallCollision, RWallCollision);
+    ADD_MOD_FUNCTION(ModTable_FindFloorPosition, FindFloorPosition);
+    ADD_MOD_FUNCTION(ModTable_FindLWallPosition, FindLWallPosition);
+    ADD_MOD_FUNCTION(ModTable_FindRoofPosition, FindRoofPosition);
+    ADD_MOD_FUNCTION(ModTable_FindRWallPosition, FindRWallPosition);
+    ADD_MOD_FUNCTION(ModTable_CopyCollisionMask, CopyCollisionMask);
+    ADD_MOD_FUNCTION(ModTable_GetCollisionInfo, GetCollisionInfo);
+#endif
+
+
     superLevels.clear();
     inheritLevel = 0;
     LoadMods();
@@ -240,14 +290,24 @@ void RSDK::ApplyModChanges()
     RenderDevice::SetWindowTitle();
 }
 
-void RSDK::ScanModFolder(ModInfo *info)
+bool32 RSDK::ScanModFolder(ModInfo *info, const char* targetFile)
 {
     if (!info)
-        return;
+        return false;
 
     const std::string modDir = info->path + "/" + info->id;
 
-    info->fileMap.clear();
+    if (!targetFile)
+        info->fileMap.clear();
+
+    std::string targetFileStr = "";
+    if (targetFile) {
+        char pathLower[0x100];
+        memset(pathLower, 0, sizeof(char) * 0x100);
+        for (int32 c = 0; c < strlen(targetFile); ++c) pathLower[c] = tolower(targetFile[c]);
+
+        targetFileStr = std::string(pathLower);
+    }
 
     fs::path dataPath(modDir);
 
@@ -259,13 +319,24 @@ void RSDK::ScanModFolder(ModInfo *info)
                     std::string folderPath = dirFile.path().string().substr(dataPath.string().length() + 1);
                     std::transform(folderPath.begin(), folderPath.end(), folderPath.begin(),
                                    [](unsigned char c) { return c == '\\' ? '/' : std::tolower(c); });
-                    info->fileMap.insert(std::pair<std::string, std::string>(folderPath, dirFile.path().string()));
+
+                    if (targetFile) {
+                        if (folderPath == targetFileStr) {
+                            info->fileMap.insert(std::pair<std::string, std::string>(folderPath, dirFile.path().string()));
+                            return true;
+                        }
+                    }
+                    else {
+                        info->fileMap.insert(std::pair<std::string, std::string>(folderPath, dirFile.path().string()));
+                    }
                 }
             }
         } catch (fs::filesystem_error fe) {
             PrintLog(PRINT_ERROR, "Mod File Scanning Error: %s", fe.what());
         }
     }
+
+    return !targetFile ? true : false;
 }
 
 void RSDK::UnloadMods()
@@ -338,7 +409,7 @@ void RSDK::LoadMods(bool newOnly)
 
     using namespace std;
     char modBuf[0x100];
-    sprintf_s(modBuf, (int32)sizeof(modBuf), "%smods/", SKU::userFileDir);
+    sprintf_s(modBuf, sizeof(modBuf), "%smods/", SKU::userFileDir);
     fs::path modPath(modBuf);
 
     if (fs::exists(modPath) && fs::is_directory(modPath)) {
@@ -444,6 +515,7 @@ bool32 RSDK::LoadMod(ModInfo *info, std::string modsPath, std::string folder, bo
     PrintLog(PRINT_NORMAL, "[MOD] Trying to load mod %s...", folder.c_str());
 
     info->fileMap.clear();
+    info->excludedFiles.clear();
     info->modLogicHandles.clear();
     info->name             = "";
     info->desc             = "";
@@ -695,7 +767,7 @@ void RSDK::SaveMods()
 {
     ModInfo *cur = currentMod;
     char modBuf[0x100];
-    sprintf_s(modBuf, (int32)sizeof(modBuf), "%smods/", SKU::userFileDir);
+    sprintf_s(modBuf, sizeof(modBuf), "%smods/", SKU::userFileDir);
     fs::path modPath(modBuf);
 
     SortMods();
@@ -734,11 +806,11 @@ bool32 RSDK::LoadModInfo(const char *id, String *name, String *description, Stri
 {
     if (!id) { // NULL == "Internal" Logic
         if (name)
-            InitString(name, gameVerInfo.gameTitle, false);
+            InitString(name, gameVerInfo.gameTitle, 0);
         if (description)
-            InitString(description, gameVerInfo.gameSubtitle, false);
+            InitString(description, gameVerInfo.gameSubtitle, 0);
         if (version)
-            InitString(version, gameVerInfo.version, false);
+            InitString(version, gameVerInfo.version, 0);
         if (active)
             *active = true;
 
@@ -746,11 +818,11 @@ bool32 RSDK::LoadModInfo(const char *id, String *name, String *description, Stri
     }
     else if (!strlen(id) && currentMod) { // "" == Current Mod
         if (name)
-            InitString(name, (char *)currentMod->name.c_str(), false);
+            InitString(name, currentMod->name.c_str(), 0);
         if (description)
-            InitString(description, (char *)currentMod->desc.c_str(), false);
+            InitString(description, currentMod->desc.c_str(), 0);
         if (version)
-            InitString(version, (char *)currentMod->version.c_str(), false);
+            InitString(version, currentMod->version.c_str(), 0);
         if (active)
             *active = currentMod->active;
 
@@ -760,11 +832,11 @@ bool32 RSDK::LoadModInfo(const char *id, String *name, String *description, Stri
     for (int32 m = 0; m < modList.size(); ++m) {
         if (modList[m].id == id) {
             if (name)
-                InitString(name, (char *)modList[m].name.c_str(), false);
+                InitString(name, modList[m].name.c_str(), 0);
             if (description)
-                InitString(description, (char *)modList[m].desc.c_str(), false);
+                InitString(description, modList[m].desc.c_str(), 0);
             if (version)
-                InitString(version, (char *)modList[m].version.c_str(), false);
+                InitString(version, modList[m].version.c_str(), 0);
             if (active)
                 *active = modList[m].active;
 
@@ -810,7 +882,7 @@ bool32 RSDK::ForeachModID(String *id)
         return false;
     }
     string set = modList[foreachStackPtr->id].id;
-    InitString(id, (char *)set.c_str(), (int32)set.length());
+    InitString(id, set.c_str(), 0);
     return true;
 }
 
@@ -873,8 +945,8 @@ void RSDK::GetModPath(const char *id, String *result)
         return;
 
     char buf[0x200];
-    sprintf_s(buf, (int32)sizeof(buf), "%smods/%s", SKU::userFileDir, id);
-    InitString(result, buf, (int32)strlen(buf));
+    sprintf_s(buf, sizeof(buf), "%smods/%s", SKU::userFileDir, id);
+    InitString(result, buf, 0);
 }
 
 std::string GetModPath_i(const char *id)
@@ -1004,7 +1076,7 @@ void RSDK::GetSettingsString(const char *id, const char *key, String *result, co
     }
     else if (!strlen(id)) {
         if (!currentMod) {
-            InitString(result, (char *)fallback, (int32)strlen(fallback));
+            InitString(result, fallback, 0);
             return;
         }
 
@@ -1015,10 +1087,10 @@ void RSDK::GetSettingsString(const char *id, const char *key, String *result, co
     if (!v.length()) {
         if (currentMod->id == id)
             SetSettingsString(key, result);
-        InitString(result, (char *)fallback, (int32)strlen(fallback));
+        InitString(result, fallback, 0);
         return;
     }
-    InitString(result, (char *)v.c_str(), (int32)v.length());
+    InitString(result, v.c_str(), 0);
 }
 
 std::string GetNidConfigValue(const char *key)
@@ -1081,10 +1153,10 @@ void RSDK::GetConfigString(const char *key, String *result, const char *fallback
 {
     std::string v = GetNidConfigValue(key);
     if (!v.length()) {
-        InitString(result, (char *)fallback, (int32)strlen(fallback));
+        InitString(result, fallback, 0);
         return;
     }
-    InitString(result, (char *)v.c_str(), (int32)v.length());
+    InitString(result, v.c_str(), 0);
 }
 
 bool32 RSDK::ForeachConfigCategory(String *category)
@@ -1124,7 +1196,7 @@ bool32 RSDK::ForeachConfigCategory(String *category)
         foreachStackPtr--;
         return false;
     }
-    InitString(category, (char *)cat.c_str(), (int32)cat.length());
+    InitString(category, cat.c_str(), 0);
     return true;
 }
 
@@ -1171,9 +1243,141 @@ bool32 RSDK::ForeachConfig(String *config)
         return false;
     }
     string r = cat + ":" + key;
-    InitString(config, (char *)r.c_str(), (int32)r.length());
+    InitString(config, r.c_str(), 0);
     return true;
 }
+
+#if RETRO_MOD_LOADER_VER >= 2
+bool32 RSDK::ForeachSettingCategory(const char *id, String *category)
+{
+    if (!id) {
+        // TODO: allow user to get values from settings.ini?
+    }
+    else if (!strlen(id)) {
+        if (!currentMod)
+            return false;
+
+        id = currentMod->id.c_str();
+    }
+
+    if (!category)
+        return false;
+
+    int32 m;
+    for (m = 0; m < modList.size(); ++m) {
+        if (modList[m].active && modList[m].id == id)
+            break;
+    }
+
+    if (m == modList.size())
+        return false;
+
+    ModInfo *mod = &modList[m];
+
+    using namespace std;
+    if (!mod->settings.size())
+        return false;
+
+    if (category->chars)
+        ++foreachStackPtr->id;
+    else {
+        ++foreachStackPtr;
+        foreachStackPtr->id = 0;
+    }
+    int32 sid = 0;
+    string cat;
+    bool32 set = false;
+    if (mod->settings[""].size() && foreachStackPtr->id == sid++) {
+        set = true;
+        cat = "";
+    }
+    if (!set) {
+        for (pair<string, map<string, string>> kv : mod->settings) {
+            if (!kv.first.length())
+                continue;
+            if (kv.second.size() && foreachStackPtr->id == sid++) {
+                set = true;
+                cat = kv.first;
+                break;
+            }
+        }
+    }
+    if (!set) {
+        foreachStackPtr--;
+        return false;
+    }
+    InitString(category, cat.c_str(), 0);
+    return true;
+}
+
+bool32 RSDK::ForeachSetting(const char *id, String *setting)
+{
+    if (!id) {
+        // TODO: allow user to get values from settings.ini?
+    }
+    else if (!strlen(id)) {
+        if (!currentMod)
+            return false;
+
+        id = currentMod->id.c_str();
+    }
+
+    if (!setting)
+        return false;
+    using namespace std;
+    if (!currentMod->settings.size())
+        return false;
+
+    int32 m;
+    for (m = 0; m < modList.size(); ++m) {
+        if (modList[m].active && modList[m].id == id)
+            break;
+    }
+
+    if (m == modList.size())
+        return false;
+
+    ModInfo *mod = &modList[m];
+
+    if (setting->chars)
+        ++foreachStackPtr->id;
+    else {
+        ++foreachStackPtr;
+        foreachStackPtr->id = 0;
+    }
+    int32 sid = 0;
+    string key, cat;
+    if (mod->settings[""].size()) {
+        for (pair<string, string> pair : mod->settings[""]) {
+            if (foreachStackPtr->id == sid++) {
+                cat = "";
+                key = pair.first;
+                break;
+            }
+        }
+    }
+    if (!key.length()) {
+        for (pair<string, map<string, string>> kv : mod->settings) {
+            if (!kv.first.length())
+                continue;
+            for (pair<string, string> pair : kv.second) {
+                if (foreachStackPtr->id == sid++) {
+                    cat = kv.first;
+                    key = pair.first;
+                    break;
+                }
+            }
+        }
+    }
+    if (!key.length()) {
+        foreachStackPtr--;
+        return false;
+    }
+    string r = cat + ":" + key;
+    InitString(setting, r.c_str(), 0);
+    return true;
+}
+#endif
 
 void SetModSettingsValue(const char *key, std::string val)
 {
@@ -1486,13 +1690,13 @@ void RSDK::GetAchievementInfo(uint32 id, String *name, String *description, Stri
         return;
 
     if (name)
-        InitString(name, (char *)achievementList[id].name.c_str(), 0);
+        InitString(name, achievementList[id].name.c_str(), 0);
 
     if (description)
-        InitString(description, (char *)achievementList[id].description.c_str(), 0);
+        InitString(description, achievementList[id].description.c_str(), 0);
 
     if (identifer)
-        InitString(identifer, (char *)achievementList[id].identifier.c_str(), 0);
+        InitString(identifer, achievementList[id].identifier.c_str(), 0);
 
     if (achieved)
         *achieved = achievementList[id].achieved;
@@ -1559,4 +1763,151 @@ void RSDK::RegisterStateHook(void (*state)(), bool32 (*hook)(bool32 skippedState
 
     stateHookList.push_back(stateHook);
 }
+
+#if RETRO_MOD_LOADER_VER >= 2
+
+// Files
+bool32 RSDK::ExcludeFile(const char *id, const char *path)
+{
+    if (!id)
+        return false;
+
+    if (!strlen(id) && currentMod)
+        id = currentMod->id.c_str();
+
+    int32 m;
+    for (m = 0; m < modList.size(); ++m) {
+        if (modList[m].active && modList[m].id == id)
+            break;
+    }
+
+    if (m == modList.size())
+        return false;
+
+    char pathLower[0x100];
+    memset(pathLower, 0, sizeof(pathLower));
+    for (int32 c = 0; c < strlen(path); ++c) pathLower[c] = tolower(path[c]);
+
+    auto &excludeList = modList[m].excludedFiles;
+    if (std::find(excludeList.begin(), excludeList.end(), pathLower) == excludeList.end()) {
+        excludeList.push_back(std::string(pathLower));
+
+        return true;
+    }
+
+    return false;
+}
+bool32 RSDK::ExcludeAllFiles(const char *id)
+{
+    if (!id)
+        return false;
+
+    if (!strlen(id) && currentMod)
+        id = currentMod->id.c_str();
+
+    int32 m;
+    for (m = 0; m < modList.size(); ++m) {
+        if (modList[m].active && modList[m].id == id)
+            break;
+    }
+
+    if (m == modList.size())
+        return false;
+
+    auto &excludeList = modList[m].excludedFiles;
+    for (auto file : modList[m].fileMap) {
+        excludeList.push_back(file.first);
+    }
+
+    modList[m].fileMap.clear();
+
+    return true;
+}
+bool32 RSDK::ReloadFile(const char *id, const char *path)
+{
+    if (!id)
+        return false;
+
+    if (!strlen(id) && currentMod)
+        id = currentMod->id.c_str();
+
+    int32 m;
+    for (m = 0; m < modList.size(); ++m) {
+        if (modList[m].active && modList[m].id == id)
+            break;
+    }
+
+    if (m == modList.size())
+        return false;
+
+    char pathLower[0x100];
+    memset(pathLower, 0, sizeof(pathLower));
+    for (int32 c = 0; c < strlen(path); ++c) pathLower[c] = tolower(path[c]);
+
+    auto &excludeList = modList[m].excludedFiles;
+    if (std::find(excludeList.begin(), excludeList.end(), pathLower) != excludeList.end()) {
+        excludeList.erase(std::remove(excludeList.begin(), excludeList.end(), pathLower), excludeList.end());
+
+        return true;
+    }
+
+    ScanModFolder(&modList[m], path);
+
+    return true;
+}
+bool32 RSDK::ReloadAllFiles(const char *id)
+{
+    if (!id)
+        return false;
+
+    if (!strlen(id) && currentMod)
+        id = currentMod->id.c_str();
+
+    int32 m;
+    for (m = 0; m < modList.size(); ++m) {
+        if (modList[m].active && modList[m].id == id)
+            break;
+    }
+
+    if (m == modList.size())
+        return false;
+
+    modList[m].excludedFiles.clear();
+    ScanModFolder(&modList[m]);
+
+    return true;
+}
+
+// Objects & Entities
+bool32 RSDK::GetGroupEntities(uint16 group, void **entity)
+{
+    if (group >= TYPEGROUP_COUNT)
+        return false;
+
+    if (!entity)
+        return false;
+
+    if (*entity) {
+        ++foreachStackPtr->id;
+    }
+    else {
+        foreachStackPtr++;
+        foreachStackPtr->id = 0;
+    }
+
+    for (Entity *nextEntity = &objectEntityList[typeGroups[group].entries[foreachStackPtr->id]]; foreachStackPtr->id < typeGroups[group].entryCount;
+         ++foreachStackPtr->id, nextEntity = &objectEntityList[typeGroups[group].entries[foreachStackPtr->id]]) {
+        if (nextEntity->group == group) {
+            *entity = nextEntity;
+            return true;
+        }
+    }
+
+    foreachStackPtr--;
+
+    return false;
+}
+
+#endif
+
 #endif

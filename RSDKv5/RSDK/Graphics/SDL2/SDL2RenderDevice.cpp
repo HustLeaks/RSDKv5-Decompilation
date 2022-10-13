@@ -113,11 +113,13 @@ void RenderDevice::FlipScreen()
 
     // Clear the screen. This is needed to keep the
     // pillarboxes in fullscreen from displaying garbage data.
+    
     // PS3 PORT NOTE: alright motherfuckers so i decided to
     // not do this for now as a workaround to an issue
     // with vblank blah blah blah go join rems
     // you bastard
 #if RETRO_PLATFORM != RETRO_PS3
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0xFF);
     SDL_RenderClear(renderer);
 #endif
 
@@ -304,10 +306,10 @@ void RenderDevice::FlipScreen()
 #endif
     }
 #endif
-    SDL_SetRenderTarget(renderer, NULL);
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0xFF - (dimAmount * 0xFF));
-    if (dimAmount < 1.0)
+    if (dimAmount < 1.0f) {
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0xFF - (dimAmount * 0xFF));
         SDL_RenderFillRect(renderer, NULL);
+    }
     // no change here
     SDL_RenderPresent(renderer);
 }
@@ -762,7 +764,7 @@ void RenderDevice::ProcessEvent(SDL_Event event)
             if (game_controller != NULL) {
                 uint32 id;
                 char idBuffer[0x20];
-                sprintf_s(idBuffer, (int32)sizeof(idBuffer), "SDLDevice%d", SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(game_controller)));
+                sprintf_s(idBuffer, sizeof(idBuffer), "SDLDevice%d", SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(game_controller)));
                 GenerateHashCRC(&id, idBuffer);
 
 #if RETRO_PLATFORM != RETRO_PS3
@@ -777,7 +779,7 @@ void RenderDevice::ProcessEvent(SDL_Event event)
         case SDL_CONTROLLERDEVICEREMOVED: {
             uint32 id;
             char idBuffer[0x20];
-            sprintf_s(idBuffer, (int32)sizeof(idBuffer), "SDLDevice%d", event.cdevice.which);
+            sprintf_s(idBuffer, sizeof(idBuffer), "SDLDevice%d", event.cdevice.which);
             GenerateHashCRC(&id, idBuffer);
 
             RemoveInputDevice(InputDeviceFromID(id));
@@ -951,6 +953,11 @@ void RenderDevice::ProcessEvent(SDL_Event event)
                     break;
 
 #if !RETRO_USE_ORIGINAL_CODE
+                case SDL_SCANCODE_F4:
+                    if (engine.devMenu)
+                        engine.showEntityInfo ^= 1;
+                    break;
+
                 case SDL_SCANCODE_F5:
                     if (engine.devMenu) {
                         // Quick-Reload
@@ -975,6 +982,11 @@ void RenderDevice::ProcessEvent(SDL_Event event)
                 case SDL_SCANCODE_F7:
                     if (engine.devMenu && videoSettings.screenCount < SCREEN_COUNT)
                         videoSettings.screenCount++;
+                    break;
+
+                case SDL_SCANCODE_F8:
+                    if (engine.devMenu)
+                        engine.showUpdateRanges ^= 1;
                     break;
 
                 case SDL_SCANCODE_F9:

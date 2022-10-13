@@ -102,7 +102,7 @@ enum GameRegions {
 #define RETRO_STANDARD (0)
 #define RETRO_MOBILE   (1)
 
-#define sprintf_s(x, _, ...) sprintf(x, __VA_ARGS__)
+#define sprintf_s(x, _, ...) snprintf(x, _, __VA_ARGS__)
 
 #if defined _WIN32
 #undef sprintf_s
@@ -253,7 +253,7 @@ enum GameRegions {
 
 // defines the version of the mod loader, this should be changed ONLY if the ModFunctionTable is updated in any way
 #ifndef RETRO_MOD_LOADER_VER
-#define RETRO_MOD_LOADER_VER (1)
+#define RETRO_MOD_LOADER_VER (2)
 #endif
 
 // ============================
@@ -591,6 +591,8 @@ struct RetroEngine {
     int32 fastForwardSpeed    = 8;
     bool32 frameStep          = false;
     bool32 showPaletteOverlay = false;
+    uint8 showUpdateRanges    = 0;
+    uint8 showEntityInfo      = 0;
     bool32 drawGroupVisible[DRAWGROUP_COUNT];
 
     // Image/Video support
@@ -600,8 +602,8 @@ struct RetroEngine {
     bool32 (*skipCallback)() = NULL;
 
     bool32 streamsEnabled = true;
-    float streamVolume    = 1.0;
-    float soundFXVolume   = 1.0;
+    float streamVolume    = 1.0f;
+    float soundFXVolume   = 1.0f;
 };
 
 extern RetroEngine engine;
