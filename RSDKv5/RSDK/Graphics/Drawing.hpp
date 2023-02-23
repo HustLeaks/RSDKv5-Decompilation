@@ -207,6 +207,7 @@ public:
     static void UpdateFPSCap();
 
     // Public since it's needed for the ModAPI
+    static bool InitShaders();
     static void LoadShader(const char *fileName, bool32 linear);
 
     // ====================
@@ -232,7 +233,6 @@ public:
     static float2 viewSize;
 
 private:
-    static bool InitShaders();
     static bool SetupRendering();
     static void InitVertexBuffer();
     static bool InitGraphicsAPI();
@@ -244,12 +244,12 @@ private:
 #include "DX9/DX9RenderDevice.hpp"
 #elif RETRO_RENDERDEVICE_DIRECTX11
 #include "DX11/DX11RenderDevice.hpp"
-#elif RETRO_RENDERDEVICE_NX
-#include "NX/NXRenderDevice.hpp"
 #elif RETRO_RENDERDEVICE_SDL2
 #include "SDL2/SDL2RenderDevice.hpp"
 #elif RETRO_RENDERDEVICE_GLFW
 #include "GLFW/GLFWRenderDevice.hpp"
+#elif RETRO_RENDERDEVICE_VK
+#include "Vulkan/VulkanRenderDevice.hpp"
 #elif RETRO_RENDERDEVICE_EGL
 #include "EGL/EGLRenderDevice.hpp"
 #endif
