@@ -44,6 +44,7 @@ public:
     static bool CheckFPSCap();
     static void UpdateFPSCap();
 
+    static bool InitShaders();
     static void LoadShader(const char *fileName, bool32 linear);
 
     static inline void ShowCursor(bool32 shown) { SDL_ShowCursor(shown); }
@@ -62,7 +63,6 @@ public:
     static SDL_Texture *imageTexture;
 
 private:
-    static bool InitShaders();
     static bool SetupRendering();
     static void InitVertexBuffer();
     static bool InitGraphicsAPI();

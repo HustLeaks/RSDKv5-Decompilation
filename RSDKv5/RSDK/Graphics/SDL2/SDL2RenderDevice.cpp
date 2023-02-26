@@ -528,7 +528,7 @@ bool RenderDevice::InitGraphicsAPI()
 
         screens[s].size.y = videoSettings.pixHeight;
 
-        float viewAspect  = viewSize.x / viewSize.y;
+        float viewAspect = viewSize.x / viewSize.y;
 #if !RETRO_USE_ORIGINAL_CODE
         screenWidth = (int32)((viewAspect * videoSettings.pixHeight) + 3) & 0xFFFFFFFC;
 #else
@@ -598,6 +598,11 @@ void RenderDevice::LoadShader(const char *fileName, bool32 linear) { PrintLog(PR
 bool RenderDevice::InitShaders()
 {
     int32 maxShaders = 0;
+#if RETRO_USE_MOD_LOADER
+    // who knows maybe SDL3 will have shaders
+    shaderCount = 0;
+#endif
+
     if (videoSettings.shaderSupport) {
         LoadShader("None", false);
         LoadShader("Clean", true);
@@ -857,7 +862,7 @@ void RenderDevice::ProcessEvent(SDL_Event event)
 #endif
             switch (event.key.keysym.scancode) {
                 case SDL_SCANCODE_RETURN:
-                    if (event.key.keysym.mod == KMOD_LALT) {
+                    if (event.key.keysym.mod & KMOD_LALT) {
                         videoSettings.windowed ^= 1;
                         UpdateGameWindow();
                         changedVideoSettings = false;
@@ -901,7 +906,8 @@ void RenderDevice::ProcessEvent(SDL_Event event)
                 case SDL_SCANCODE_F1:
                     if (engine.devMenu) {
                         sceneInfo.listPos--;
-                        if (sceneInfo.listPos < sceneInfo.listCategory[sceneInfo.activeCategory].sceneOffsetStart) {
+                        if (sceneInfo.listPos < sceneInfo.listCategory[sceneInfo.activeCategory].sceneOffsetStart
+                            || sceneInfo.listPos >= sceneInfo.listCategory[sceneInfo.activeCategory].sceneOffsetEnd) {
                             sceneInfo.activeCategory--;
                             if (sceneInfo.activeCategory >= sceneInfo.categoryCount) {
                                 sceneInfo.activeCategory = sceneInfo.categoryCount - 1;
@@ -925,7 +931,7 @@ void RenderDevice::ProcessEvent(SDL_Event event)
                 case SDL_SCANCODE_F2:
                     if (engine.devMenu) {
                         sceneInfo.listPos++;
-                        if (sceneInfo.listPos >= sceneInfo.listCategory[sceneInfo.activeCategory].sceneOffsetEnd) {
+                        if (sceneInfo.listPos >= sceneInfo.listCategory[sceneInfo.activeCategory].sceneOffsetEnd || sceneInfo.listPos == 0) {
                             sceneInfo.activeCategory++;
                             if (sceneInfo.activeCategory >= sceneInfo.categoryCount) {
                                 sceneInfo.activeCategory = 0;
@@ -961,6 +967,11 @@ void RenderDevice::ProcessEvent(SDL_Event event)
                 case SDL_SCANCODE_F5:
                     if (engine.devMenu) {
                         // Quick-Reload
+#if RETRO_USE_MOD_LOADER
+                        if (event.key.keysym.mod & KMOD_LCTRL)
+                            RefreshModFolders();
+#endif
+
 #if RETRO_REV0U
                         switch (engine.version) {
                             default: break;
