@@ -82,10 +82,6 @@ enum GameRegions {
 #endif
 #endif
 
-#if defined(__BYTE_ORDER__) && (__BYTE_ORDER__ == __ORDER_BIG_ENDIAN__)
-#define RETRO_BIG_ENDIAN (1)
-#endif
-
 // ============================
 // PLATFORMS
 // ============================
@@ -169,12 +165,15 @@ enum GameRegions {
 
 #define SCREEN_CENTERY (SCREEN_YSIZE / 2)
 
+// ============================
+// Log file path
+// ============================
 #ifndef BASE_PATH
-#if RETRO_PLATFORM == RETRO_PS3
-#define BASE_PATH "/dev_usb000/SonicMania/"
-#else
-#define BASE_PATH ""
-#endif
+	#if RETRO_PLATFORM == RETRO_PS3
+		#define BASE_PATH "/dev_usb000/"
+		#else
+			#define BASE_PATH "/dev_usb001/"
+	#endif
 #endif
 
 // ============================

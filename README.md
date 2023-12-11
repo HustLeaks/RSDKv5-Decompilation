@@ -1,17 +1,29 @@
-# **About this fork**
-This fork contains a PlayStation 3 port of the game. To compile it, you need [ps3toolchain](https://github.com/ps3dev/ps3toolchain) and the [SDL2 port](https://github.com/ultra0000/PS3-SDL2).
-Once you're done installing them, go to RSDKv5.ps3, export PKG_CONFIG_PATH to /usr/local/ps3dev/portlibs/ppu/lib/pkgconfig/ and run the Makefile. After you're done compiling it, put the game data in a folder called SonicMania on a USB drive (At the moment I can't get a normal Data.rsdk file to work so you'll have to extract it to a folder simply called Data), then plug it in to your PS3's right USB port. If you have more than 2 USB ports, I do not know which one is dev_usb000 so you'll have to look in MultiMan which one is it. Speaking of MultiMan, you might want to use it to run the .self executable.
+# About the project
 
-# **TODOs**
-* Make Data.rsdk files actually work instead of having to extract them manually.
-* Fix audio so that it doesn't break your ears.
-* Properly fix input, it currently uses a workaround.
-* Try to get better performance on special stages.
-* Make the game not crash the console when quitting out.
-* ~~For some reason, the game starts to lag really badly after running for a while.~~ FIXED.
+* This fork over the port for playstation 3 system
+* This port is still in WIP (work in progress)
 
-Original README below.
+# Recurring problems
+* The sound after a few stages stops playing (just the music (it is possible to fix this by closing and opening the game)).
+* Opening xmb after a few minutes of play. Makes it charge infinitely (but it is still possible to turn off the console by holding the PS button).
+* Debug Menu not tested.
+* Low performance still in some leveis (Special stages extremely low performance, and normal stages some with problems such as Flying Battery Zone have brief slowdowns of little time).
+* Save states unavailable (if you create an iso. (If you run the game in folder mode, saving is available)).
 
+# How to start
+Read [Here](BUILDING.md).
+
+# Goals
+
+* Make the data.rsdk files works.
+* Fix the sound. (Partially fixed)
+* fix performance (normal levels (Partially fixed) and special stages (Need fixed)).
+* ~~Make the game not crash when exiting.~~ (Fixed)
+* Improve control input.
+* Make saves stay on hdd.
+* anything else?
+
+# Original description
 ![header](https://user-images.githubusercontent.com/29069561/183143615-d7f77921-13cf-4c58-8c5f-6a1e76ea20e2.svg)
 
 A complete decompilation of Retro Engine v5 and v5Ultimate.

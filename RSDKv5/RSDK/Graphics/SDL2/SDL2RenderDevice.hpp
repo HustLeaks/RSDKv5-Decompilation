@@ -36,10 +36,6 @@ public:
 
     static bool ProcessEvents();
 
-#if RETRO_PLATFORM == RETRO_PS3
-    static void PS3_VBlank(unsigned int fart);
-#endif
-
     static void InitFPSCap();
     static bool CheckFPSCap();
     static void UpdateFPSCap();

@@ -26,27 +26,10 @@ bool RenderDevice::Init()
 
     uint8 flags = 0;
 
-#if RETRO_PLATFORM == RETRO_ANDROID
-    videoSettings.windowed = false;
-    SDL_DisplayMode dm;
-    SDL_GetDesktopDisplayMode(0, &dm);
-    float hdp = 0, vdp = 0;
-
-    bool landscape = dm.h < dm.w;
-    int32 h        = landscape ? dm.w : dm.h;
-    int32 w        = landscape ? dm.h : dm.w;
-
-    videoSettings.windowWidth = ((float)SCREEN_YSIZE * h / w);
-
-#elif RETRO_PLATFORM == RETRO_SWITCH
+#if RETRO_PLATFORM == RETRO_PS3
     videoSettings.windowed     = false;
     videoSettings.windowWidth  = 1920;
     videoSettings.windowHeight = 1080;
-    flags |= SDL_WINDOW_FULLSCREEN;
-#elif RETRO_PLATFORM == RETRO_PS3
-    videoSettings.windowed     = false;
-    videoSettings.windowWidth  = 1280;
-    videoSettings.windowHeight = 720;
     flags |= SDL_WINDOW_FULLSCREEN;
 #endif
 
@@ -113,15 +96,8 @@ void RenderDevice::FlipScreen()
 
     // Clear the screen. This is needed to keep the
     // pillarboxes in fullscreen from displaying garbage data.
-    
-    // PS3 PORT NOTE: alright motherfuckers so i decided to
-    // not do this for now as a workaround to an issue
-    // with vblank blah blah blah go join rems
-    // you bastard
-#if RETRO_PLATFORM != RETRO_PS3
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0xFF);
+
     SDL_RenderClear(renderer);
-#endif
 
 #if (SDL_COMPILEDVERSION >= SDL_VERSIONNUM(2, 0, 18))
     int32 startVert = 0;
@@ -401,51 +377,24 @@ void RenderDevice::RefreshWindow()
     videoSettings.windowState = WINDOWSTATE_ACTIVE;
 }
 
-#if RETRO_PLATFORM == RETRO_PS3
-#include <rsx/rsx.h>
-
-bool hasWaitedForVBlank = true;
-
-void RenderDevice::PS3_VBlank(unsigned int fart)
-{
-    curTicks = gcmGetVBlankCount() * 10;
-    if (curTicks >= prevTicks + targetFreq) {
-        hasWaitedForVBlank = true;
-        prevTicks = curTicks; 
-    }
-    else {
-        hasWaitedForVBlank = false;
-    }
-}
-#endif
-
 void RenderDevice::InitFPSCap()
 {
     targetFreq = SDL_GetPerformanceFrequency() / videoSettings.refreshRate;
     curTicks   = 0;
     prevTicks  = 0;
-#if RETRO_PLATFORM == RETRO_PS3
-    gcmSetVBlankHandler(RenderDevice::PS3_VBlank);
-#endif
 }
 
 bool RenderDevice::CheckFPSCap()
 {
-#if RETRO_PLATFORM == RETRO_PS3
-    return hasWaitedForVBlank;
-#else
     curTicks = SDL_GetPerformanceCounter();
     if (curTicks >= prevTicks + targetFreq)
         return true;
 
     return false;
-#endif
 }
 void RenderDevice::UpdateFPSCap() 
 { 
-#if RETRO_PLATFORM != RETRO_PS3
     prevTicks = curTicks; 
-#endif
 }
 
 void RenderDevice::InitVertexBuffer()

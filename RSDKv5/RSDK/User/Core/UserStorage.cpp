@@ -1154,18 +1154,10 @@ void RSDK::SKU::InitUserDirectory()
     char buffer[0x100];
     sprintf_s(buffer, sizeof(buffer), "%s/RSDKv5/", getResourcesPath());
     SKU::SetUserFileCallbacks(buffer, NULL, NULL);
-
-#elif RETRO_PLATFORM == RETRO_ANDROID
-
-    // done by javaside
-
-#elif RETRO_PLATFORM == RETRO_LINUX
-
-    SKU::SetUserFileCallbacks("./", NULL, NULL);
     
 #elif RETRO_PLATFORM == RETRO_PS3
 
-    SKU::SetUserFileCallbacks("/dev_usb000/SonicMania/", NULL, NULL);
+    SKU::SetUserFileCallbacks("/dev_bdvd/PS3_GAME/USRDIR/", NULL, NULL);
 
 #else
 
