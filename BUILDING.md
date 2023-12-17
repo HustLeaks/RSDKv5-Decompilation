@@ -2,7 +2,7 @@
 
 * have [ps3toolchain](https://github.com/ps3dev/PS3Toolchain) and [SDL2](https://github.com/StrawFox64/SDL2PSL1GHT) configured
 * After installing SDL2 run ```export PKG_CONFIG_PATH=$PS3DEV/portlibs/ppu/lib/pkgconfig/```
-* clone this repository ```git clone https://github.com/StrawFox64/RSDKv5-Decompilation.git```
+* clone this repository ```git clone https://github.com/StrawFox64/RSDKv5-Decompilation.git --recursive```
 * clone the Sonic Mania repository ```git clone https://github.com/StrawFox64/Sonic-Mania-Decompilation.git```
 * Inside the Sonic-Mania-Decompilation repository folder copy the SonicMania folder to ```RSDKv5-Decompilation/RSDKv5```
 * look for the makefile in RSDKv5.ps3 and run make.
@@ -40,10 +40,10 @@ Here you will learn how to assemble an image (disc) of sonic mania. Thus, not ha
 * Then drag ```data.rsdk``` to RSDKv5Extract.exe
 * After you finish extracting, enter the ```Data``` folder and copy the folder from inside to ```SonicMania/PS3_GAME/USRDIR/```
 
-### Building ISO
+~~### Building ISO~~
 
-* After the previous procedures performed go back to the ```BuildingISO``` folder, select the ```SonicMania``` folder and drag to the ISO Builder Chosen
-* This will generate a file .iso that can be run on your console through webman or your preferred iso loader
-* Just copy to your external media or internal hd
+~~* After the previous procedures performed go back to the ```BuildingISO``` folder, select the ```SonicMania``` folder and drag to the ISO Builder Chosen~~
+~~* This will generate a file .iso that can be run on your console through webman or your preferred iso loader~~
+~~* Just copy to your external media or internal hd~~
 
-
+#### copy the ```SonicMania``` folder to your internal hdd to ```GAMES``` folder, or to your external media to the same folder

@@ -31,6 +31,7 @@ SOURCES		:=	\
 	../dependencies/all/tinyxml2 	\
 	../dependencies/all/iniparser 	\
 	../dependencies/all/miniz   	\
+	../dependencies/all/stb			\
 	../RSDKv5/SonicMania/ 			\
 	../RSDKv5/SonicMania/Objects
 DATA		:=	data
@@ -39,6 +40,7 @@ INCLUDES	:=	\
 	../dependencies/all/ 			\
 	../dependencies/all/tinyxml2/ 	\
 	../dependencies/all/iniparser/	\
+	../dependencies/all/stb			\
 	../RSDKv5/SonicMania/   		\
 	../RSDKv5/SonicMania/Objects/
 
