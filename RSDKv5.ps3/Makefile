@@ -9,50 +9,46 @@ endif
 
 include $(PSL1GHT)/ppu_rules
 
-# need to firgure this shit out
-#PKG_CONFIG_PATH=/usr/local/ps3dev/portlibs/ppu/lib/pkgconfig/
-
 #---------------------------------------------------------------------------------
 # TARGET is the name of the output
 # BUILD is the directory where object files & intermediate files will be placed
 # SOURCES is a list of directories containing source code
 # INCLUDES is a list of directories containing extra header files
 #---------------------------------------------------------------------------------
-TARGET		:=	$(notdir $(CURDIR))
+TARGET		:=	RSDKv5
 BUILD		:=	build
 SOURCES		:=	\
-	../RSDKv5/ 							\
+	../RSDKv5/ 						\
 	../RSDKv5/RSDK/Core/  			\
-	../RSDKv5/RSDK/Dev/        			\
-	../RSDKv5/RSDK/Storage/ \
-	../RSDKv5/RSDK/Graphics/ \
-	../RSDKv5/RSDK/Audio/        			\
-	../RSDKv5/RSDK/Input/        			\
-	../RSDKv5/RSDK/Scene/        			\
-	../RSDKv5/RSDK/Scene/Objects/ \
-	../RSDKv5/RSDK/User/Core/  \
-	../dependencies/all/tinyxml2 		\
+	../RSDKv5/RSDK/Dev/        		\
+	../RSDKv5/RSDK/Storage/			\
+	../RSDKv5/RSDK/Graphics/ 		\
+	../RSDKv5/RSDK/Audio/        	\
+	../RSDKv5/RSDK/Input/        	\
+	../RSDKv5/RSDK/Scene/      		\
+	../RSDKv5/RSDK/Scene/Objects/ 	\
+	../RSDKv5/RSDK/User/Core/  		\
+	../dependencies/all/tinyxml2 	\
 	../dependencies/all/iniparser 	\
-	../dependencies/all/miniz   \
-	../../../SonicMania/ \
-	../../../SonicMania/Objects
+	../dependencies/all/miniz   	\
+	../RSDKv5/SonicMania/ 			\
+	../RSDKv5/SonicMania/Objects
 DATA		:=	data
 INCLUDES	:=	\
-	../RSDKv5/ 					\
+	../RSDKv5/ 						\
 	../dependencies/all/ 			\
 	../dependencies/all/tinyxml2/ 	\
-	../dependencies/all/iniparser/ \
-	../dependencies/all/iniparser/ \
-	../../../SonicMania/   		\
-	../../../SonicMania/Objects/
+	../dependencies/all/iniparser/	\
+	../RSDKv5/SonicMania/   		\
+	../RSDKv5/SonicMania/Objects/
 
-TITLE		:=	RSDKv5
-APPID		:=	SONCMANIA
+TITLE		:=	SonicMania
+APPID		:=	SNMN07023
 CONTENTID	:=	UP0001-$(APPID)_00-0000000000000000
+
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------
-
 # you may be asking why on earth did i put the -O2 optimization flags
 # manually. it turns out this port wouldn't work on real hardware so i
 # started checking what was the one that was causing this.
@@ -93,7 +89,7 @@ EXTRA_OFLAGS = -fthread-jumps \
 -fsched-interblock  -fsched-spec \
 -fschedule-insns  
 
-CFLAGS		=	-g3 -O1 $(EXTRA_OFLAGS) -Wall -mcpu=cell $(MACHDEP) $(INCLUDE) -D__PS3__ -DRSDK_AUTOBUILD -I/usr/local/ps3dev/portlibs/ppu/include -I/usr/local/ps3dev/portlibs/ppu/include/SDL2
+CFLAGS		=	-g3 -O1 $(EXTRA_OFLAGS) -Wall -mcpu=cell $(MACHDEP) $(INCLUDE) -D__PS3__ -DRSDK_AUTOBUILD -I$(PS3DEV)/portlibs/ppu/include -I$(PS3DEV)/portlibs/ppu/include/SDL2
 CXXFLAGS	=	$(CFLAGS)
 
 LDFLAGS		=	$(MACHDEP) -Wl,-Map,$(notdir $@).map
@@ -101,7 +97,7 @@ LDFLAGS		=	$(MACHDEP) -Wl,-Map,$(notdir $@).map
 #---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project
 #---------------------------------------------------------------------------------
-LIBS	:=	$(shell /usr/local/ps3dev/portlibs/ppu/bin/sdl2-config --libs) $(shell pkg-config --libs theora) -lnet -lsysutil -lsysmodule
+LIBS	:=	$(shell pkg-config --libs sdl2) $(shell pkg-config --libs theora) -lnet -lsysutil -lsysmodule
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
@@ -172,7 +168,7 @@ $(BUILD):
 #---------------------------------------------------------------------------------
 clean:
 	@echo clean ...
-	@rm -fr $(BUILD) $(OUTPUT).elf $(OUTPUT).self
+	@rm -fr $(BUILD) $(OUTPUT).elf $(OUTPUT).fake.self $(OUTPUT).self
 
 #---------------------------------------------------------------------------------
 run:

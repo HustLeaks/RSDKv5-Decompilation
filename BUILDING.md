@@ -12,7 +12,7 @@
 # Building an ISO
 
 ### Important Notice
-Here you will learn how to assemble an image (disc) of sonic mania. Thus, not having the need to run it internally in multiman, but as a normal playstation 3 game. The processes can be a bit complex for beginners as it was for me. But I left all the boring parts ready in the ```CreateISO``` folder. Make a calm reading and with enough attention, to finish the procedures and so you can assemble a functional image. Please do not skip steps. For they are all important. 
+Here you will learn how to assemble an image (disc) of sonic mania. Thus, not having the need to run it internally in multiman, but as a normal playstation 3 game. The processes can be a bit complex for beginners as it was for me. But I left all the boring parts ready in the ```BuildingISO``` folder. Make a calm reading and with enough attention, to finish the procedures and so you can assemble a functional image. Please do not skip steps. For they are all important. 
 
 * All procedures are performed through windows, if you are using another operating system, research how to use the necessary tools in your operating system.
 
@@ -27,22 +27,22 @@ Here you will learn how to assemble an image (disc) of sonic mania. Thus, not ha
 
 ### Building Eboot.bin
 
-* Download everything you need. put them all in the ```CreateISO``` folder
-* After the compilation of the project (Previously described) copy ```RSDKv5.self``` to ```CreateISO``` folder
-* Open the terminal in the CreateISO folder and run ```scetool.exe --decrypt RSDKv5.self EBOOT.ELF``` and wait
+* Download everything you need. put them all in the ```BuildingISO``` folder
+* After the compilation of the project (Previously described) copy ```RSDKv5.self``` to ```BuildingISO``` folder
+* Open the terminal in the BuildingISO folder and run ```scetool.exe --decrypt RSDKv5.self EBOOT.ELF``` and wait
 * after decrypting run ```scetool.exe --template RSDKv5.self --sce-type=SELF --skip-sections=FALSE --compress-data=false --encrypt EBOOT.ELF EBOOT.BIN```
 * When you finish encrypting. Copy ```EBOOT.BIN``` for ```SonicMania/PS3_GAME/USRDIR/```
 
 ### Data.rsdk file
 
-* With your original copy of sonic mania copy the ```data.rsdk``` file for ```CreateISO``` folder
+* With your original copy of sonic mania copy the ```data.rsdk``` file for ```BuildingISO``` folder
 * With RSDK Extract and ```data.rsdk```
 * Then drag ```data.rsdk``` to RSDKv5Extract.exe
 * After you finish extracting, enter the ```Data``` folder and copy the folder from inside to ```SonicMania/PS3_GAME/USRDIR/```
 
 ### Building ISO
 
-* After the previous procedures performed go back to the ```CreateISO``` folder, select the ```SonicMania``` folder and drag to the ISO Builder Chosen
+* After the previous procedures performed go back to the ```BuildingISO``` folder, select the ```SonicMania``` folder and drag to the ISO Builder Chosen
 * This will generate a file .iso that can be run on your console through webman or your preferred iso loader
 * Just copy to your external media or internal hd
 
