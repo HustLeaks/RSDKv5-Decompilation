@@ -21,7 +21,7 @@ Here you will learn how to assemble an image (disc) of sonic mania. Thus, not ha
 * Need a legitimate copy of Sonic Mania.
 * Need SCETool.
 * Need [RSDKv5 Extract](https://github.com/MainMemory/RSDKv5Extract/releases).
-* Need ISO Builder (```MakePS3ISO``` or ```GenPS3ISO``` (Choice of your preference)).
+* ~~Need ISO Builder (```MakePS3ISO``` or ```GenPS3ISO``` (Choice of your preference)).~~
 
 # Finishing
 
@@ -40,10 +40,10 @@ Here you will learn how to assemble an image (disc) of sonic mania. Thus, not ha
 * Then drag ```data.rsdk``` to RSDKv5Extract.exe
 * After you finish extracting, enter the ```Data``` folder and copy the folder from inside to ```SonicMania/PS3_GAME/USRDIR/```
 
-~~### Building ISO~~
+### ~~Building ISO~~ (Not Working)
 
-~~* After the previous procedures performed go back to the ```BuildingISO``` folder, select the ```SonicMania``` folder and drag to the ISO Builder Chosen~~
-~~* This will generate a file .iso that can be run on your console through webman or your preferred iso loader~~
-~~* Just copy to your external media or internal hd~~
+* ~~After the previous procedures performed go back to the ```BuildingISO``` folder, select the ```SonicMania``` folder and drag to the ISO Builder Chosen~~
+* ~~This will generate a file .iso that can be run on your console through webman or your preferred iso loader~~
+* ~~Just copy to your external media or internal hd~~
 
 #### copy the ```SonicMania``` folder to your internal hdd to ```GAMES``` folder, or to your external media to the same folder

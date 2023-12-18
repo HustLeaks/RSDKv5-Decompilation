@@ -8,7 +8,7 @@
 * Opening xmb after a few minutes of play. Makes it charge infinitely (but it is still possible to turn off the console by holding the PS button).
 * Debug Menu not tested.
 * Low performance still in some leveis (Special stages extremely low performance, and normal stages some with problems such as Flying Battery Zone have brief slowdowns of little time).
-* Save states unavailable (if you create an iso. (If you run the game in folder mode, saving is available)).
+* Save states unavailable (~~if you create an iso~~. (If you run the game in folder mode, saving is available)).
 
 # How to start
 Read [Here](BUILDING.md).
