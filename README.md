@@ -5,7 +5,7 @@
 
 # Recurring problems
 * The sound after a few stages stops playing (just the music (it is possible to fix this by closing and opening the game)).
-* Opening xmb after a few minutes of play. Makes it charge infinitely (but it is still possible to turn off the console by holding the PS button).
+* Opening xmb after a few minutes of play. Makes it charge infinitely (but it is still possible to turn off the console by holding the PS button (Do not use the "Quit Game" option as it will load infinitely)).
 * Debug Menu not tested.
 * Low performance still in some leveis (Special stages extremely low performance, and normal stages some with problems such as Flying Battery Zone have brief slowdowns of little time).
 * Save states unavailable (~~if you create an iso~~. (If you run the game in folder mode, saving is available)).
