@@ -171,8 +171,6 @@ enum GameRegions {
 #ifndef BASE_PATH
 	#if RETRO_PLATFORM == RETRO_PS3
 		#define BASE_PATH "/dev_usb000/"
-		#else
-			#define BASE_PATH "/dev_usb001/"
 	#endif
 #endif
 

@@ -51,45 +51,51 @@ CONTENTID	:=	UP0001-$(APPID)_00-0000000000000000
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------
-# you may be asking why on earth did i put the -O2 optimization flags
-# manually. it turns out this port wouldn't work on real hardware so i
-# started checking what was the one that was causing this.
-# it's -fschedule-insns2, so it's been removed from here.
+# you may be asking why on ear th did i put the -O2 optimization flags manually?
+# this happens because the optimizations -O2 table does not work here, because of some unknown bug
+# This bug occurs with flag -fcode-hoisting, for some reason if you use separator in it the execution does not work
+# and if you remove the separator, the compiler does not let you compile because it does not have a separator
+# but if you take out the separator and move it up the flag -freorder-blocks-algorithm=stc, it works mysteriously
+# below and the complete table with a small change.
 
-EXTRA_OFLAGS = -fthread-jumps \
--falign-functions  -falign-jumps \
--falign-loops  -falign-labels \
+EXTRA_OFLAGS = -falign-functions  -falign-jumps \
+-falign-labels  -falign-loops \
 -fcaller-saves \
 -fcrossjumping \
 -fcse-follow-jumps  -fcse-skip-blocks \
 -fdelete-null-pointer-checks \
--fdevirtualize -fdevirtualize-speculatively \
+-fdevirtualize  -fdevirtualize-speculatively \
 -fexpensive-optimizations \
--fgcse  -fgcse-lm  \
+-fsplit-loops \
+-fgcse  -fgcse-lm \
 -fhoist-adjacent-loads \
+-finline-functions \
 -finline-small-functions \
 -findirect-inlining \
--fipa-cp \
--fipa-bit-cp \
--fipa-vrp \
--fipa-sra \
--fipa-icf \
+-fipa-bit-cp  -fipa-cp  -fipa-icf \
+-fipa-ra -fipa-sra  -fipa-vrp \
 -fisolate-erroneous-paths-dereference \
 -flra-remat \
 -foptimize-sibling-calls \
 -foptimize-strlen \
 -fpartial-inlining \
 -fpeephole2 \
--fstore-merging \
--fstrict-aliasing -fstrict-overflow \
--ftree-builtin-call-dce \
--ftree-switch-conversion -ftree-tail-merge \
--fcode-hoisting 
+-fcode-hoisting
 -freorder-blocks-algorithm=stc \
--freorder-blocks-and-partition -freorder-functions \
+-freorder-blocks-and-partition  -freorder-functions \
 -frerun-cse-after-loop \
+-fschedule-insns -fschedule-insns2 \
 -fsched-interblock  -fsched-spec \
--fschedule-insns  
+-fstore-merging \
+-fstrict-aliasing \
+-fthread-jumps \
+-ftree-builtin-call-dce \
+-ftree-loop-vectorize \
+-ftree-pre \
+-ftree-slp-vectorize \
+-ftree-switch-conversion  -ftree-tail-merge \
+-ftree-vrp \
+-fvect-cost-model=cheap
 
 CFLAGS		=	-g3 -O1 $(EXTRA_OFLAGS) -Wall -mcpu=cell $(MACHDEP) $(INCLUDE) -D__PS3__ -DRSDK_AUTOBUILD -I$(PS3DEV)/portlibs/ppu/include -I$(PS3DEV)/portlibs/ppu/include/SDL2
 CXXFLAGS	=	$(CFLAGS)
