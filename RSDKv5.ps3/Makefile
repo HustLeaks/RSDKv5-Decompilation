@@ -51,7 +51,7 @@ CONTENTID	:=	UP0001-$(APPID)_00-0000000000000000
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------
-# you may be asking why on ear th did i put the -O2 optimization flags manually?
+# you may be asking why on did i put the -O2 optimization flags manually?
 # this happens because the optimizations -O2 table does not work here, because of some unknown bug
 # This bug occurs with flag -fcode-hoisting, for some reason if you use separator in it the execution does not work
 # and if you remove the separator, the compiler does not let you compile because it does not have a separator
@@ -73,7 +73,7 @@ EXTRA_OFLAGS = -falign-functions  -falign-jumps \
 -finline-small-functions \
 -findirect-inlining \
 -fipa-bit-cp  -fipa-cp  -fipa-icf \
--fipa-ra -fipa-sra  -fipa-vrp \
+-fipa-ra  -fipa-sra  -fipa-vrp \
 -fisolate-erroneous-paths-dereference \
 -flra-remat \
 -foptimize-sibling-calls \
@@ -105,7 +105,7 @@ LDFLAGS		=	$(MACHDEP) -Wl,-Map,$(notdir $@).map
 #---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project
 #---------------------------------------------------------------------------------
-LIBS	:=	$(shell pkg-config --libs sdl2) $(shell pkg-config --libs theora) -lnet -lsysutil -lsysmodule
+LIBS	:=	$(shell pkg-config --libs sdl2 theora) -lnet -lsysutil -lsysmodule
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing

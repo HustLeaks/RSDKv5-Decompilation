@@ -406,7 +406,6 @@ void RSDK::LoadStringList(String *stringList, const char *filePath, uint32 charS
             ReadBytes(&info, stringList->chars, stringList->size * sizeof(uint16));
 #endif
             stringList->length = stringList->size;
-
         }
         else {
             // UTF-8

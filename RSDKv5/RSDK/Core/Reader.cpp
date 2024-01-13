@@ -241,15 +241,14 @@ bool32 RSDK::LoadFile(FileInfo *info, const char *filename, uint8 fileMode)
 
 #if RETRO_PLATFORM == RETRO_PS3
     bool32 addPath = true;
-#else
-    bool32 addPath = false;
 #endif
 
 #if RETRO_USE_MOD_LOADER
     char pathLower[0x100];
     memset(pathLower, 0, sizeof(pathLower));
     for (int32 c = 0; c < strlen(filename); ++c) pathLower[c] = tolower(filename[c]);
-
+	
+    bool32 addPath = false;
     if (modSettings.activeMod != -1) {
         char buf[0x100];
         sprintf_s(buf, sizeof(buf), "%s", fullFilePath);
