@@ -2,7 +2,7 @@
 
 * have [ps3toolchain](https://github.com/ps3dev/PS3Toolchain) and [SDL2](https://github.com/StrawFox64/SDL2PSL1GHT) configured
 * After installing SDL2 run ```export PKG_CONFIG_PATH=$PS3DEV/portlibs/ppu/lib/pkgconfig/```
-* clone this repository ```git clone https://github.com/StrawFox64/RSDKv5-Decompilation.git --recursive```
+* clone this repository ```git clone --recursive https://github.com/StrawFox64/RSDKv5-Decompilation.git```
 * clone the Sonic Mania repository ```git clone https://github.com/StrawFox64/Sonic-Mania-Decompilation.git```
 * Inside the Sonic-Mania-Decompilation repository folder copy the SonicMania folder to ```RSDKv5-Decompilation/RSDKv5```
 * look for the makefile in RSDKv5.ps3 and run make.

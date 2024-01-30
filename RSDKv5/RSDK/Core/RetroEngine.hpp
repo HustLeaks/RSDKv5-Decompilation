@@ -75,11 +75,7 @@ enum GameRegions {
 #endif
 
 #ifndef RETRO_STANDALONE
-#ifdef __PS3__
-#define RETRO_STANDALONE (0)
-#else
 #define RETRO_STANDALONE (1)
-#endif
 #endif
 
 // ============================
@@ -245,11 +241,7 @@ enum GameRegions {
 
 // enables the use of the mod loader
 #ifndef RETRO_USE_MOD_LOADER
-#if RETRO_PLATFORM == RETRO_PS3
-#define RETRO_USE_MOD_LOADER (0)
-#else
 #define RETRO_USE_MOD_LOADER (!RETRO_USE_ORIGINAL_CODE && 1)
-#endif
 #endif
 
 // defines the version of the mod loader, this should be changed ONLY if the ModFunctionTable is updated in any way
