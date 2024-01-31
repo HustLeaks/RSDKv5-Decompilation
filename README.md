@@ -17,9 +17,9 @@ Read [Here](BUILDING.md).
 
 * Make the data.rsdk files works.
 * Fix the sound. (Partially fixed)
-* fix performance (normal levels (Partially fixed) and special stages (Need fixed)).
+* Fix performance. (normal levels (Partially fixed) and special stages (Need fixed))
 * ~~Make the game not crash when exiting.~~ (Fixed)
-* ~~Improve control input.~~
+* ~~Improve control input.~~ (Fixed)
 * Two player support with controller.
 * Make saves stay on hdd.
 * anything else?

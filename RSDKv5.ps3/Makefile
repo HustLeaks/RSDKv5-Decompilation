@@ -45,7 +45,7 @@ INCLUDES	:=	\
 	../RSDKv5/SonicMania/Objects/
 
 TITLE		:=	SonicMania
-APPID		:=	SNMN07023
+APPID		:=	CUSA07023
 CONTENTID	:=	UP0001-$(APPID)_00-0000000000000000
 
 #---------------------------------------------------------------------------------
