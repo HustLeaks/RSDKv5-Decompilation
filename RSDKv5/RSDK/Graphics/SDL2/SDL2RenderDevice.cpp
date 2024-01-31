@@ -721,10 +721,9 @@ void RenderDevice::ProcessEvent(SDL_Event event)
                 sprintf_s(idBuffer, sizeof(idBuffer), "SDLDevice%d", SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(game_controller)));
                 GenerateHashCRC(&id, idBuffer);
 
-#if RETRO_PLATFORM != RETRO_PS3
                 if (SKU::InitSDL2InputDevice(id, game_controller) == NULL)
                     SDL_GameControllerClose(game_controller);
-#endif
+
             }
 
             break;

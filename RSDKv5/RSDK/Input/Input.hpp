@@ -58,10 +58,7 @@ enum InputDeviceAPIs {
     DEVICE_API_GLFW, // custom-made for OGL, won't be in ANY real RSDKv5 version ever, it's just cool
 #endif
 #if RETRO_INPUTDEVICE_PDBOAT
-    DEVICE_API_PDBOAT, // custom-made for android (paddleboat API)
-#endif
-#if RETRO_INPUTDEVICE_PS3
-    DEVICE_API_PS3
+    DEVICE_API_PDBOAT // custom-made for android (paddleboat API)
 #endif
 };
 
@@ -503,10 +500,6 @@ extern int32 gamePadCount;
 
 #if RETRO_INPUTDEVICE_PDBOAT
 #include "Paddleboat/PDBInputDevice.hpp"
-#endif
-
-#if RETRO_INPUTDEVICE_PS3
-#include "PS3/PS3InputDevice.hpp"
 #endif
 
 // Initializes the input devices & the backend APIs powering em

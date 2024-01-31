@@ -201,7 +201,6 @@ enum GameRegions {
 #define RETRO_INPUTDEVICE_SDL2   (0)
 #define RETRO_INPUTDEVICE_GLFW   (0)
 #define RETRO_INPUTDEVICE_PDBOAT (0)
-#define RETRO_INPUTDEVICE_PS3    (0)
 
 // ============================
 // USER CORE BACKENDS
@@ -393,7 +392,7 @@ enum GameRegions {
 #error RSDK_USE_OGL must be defined.
 #endif
 
-#elif RETRO_PLATFORM == RETRO_OSX || RETRO_PLATFORM == RETRO_iOS
+#elif RETRO_PLATFORM == RETRO_OSX || RETRO_PLATFORM == RETRO_iOS || RETRO_PLATFORM == RETRO_PS3
 
 #undef RETRO_RENDERDEVICE_SDL2
 #define RETRO_RENDERDEVICE_SDL2 (1)
@@ -403,17 +402,6 @@ enum GameRegions {
 
 #undef RETRO_INPUTDEVICE_SDL2
 #define RETRO_INPUTDEVICE_SDL2 (1)
-
-#elif RETRO_PLATFORM == RETRO_PS3
-
-#undef RETRO_RENDERDEVICE_SDL2
-#define RETRO_RENDERDEVICE_SDL2 (1)
-
-#undef RETRO_AUDIODEVICE_SDL2
-#define RETRO_AUDIODEVICE_SDL2 (1)
-
-#undef RETRO_INPUTDEVICE_PS3
-#define RETRO_INPUTDEVICE_PS3 (1)
 
 #endif
 
@@ -503,16 +491,11 @@ enum GameRegions {
 #include <androidHelpers.hpp>
 
 #undef RETRO_USING_MOUSE
-
-#elif RETRO_PLATFORM == RETRO_PS3
-#include <SDL2/SDL.h>
-
-#include <theora/theoradec.h>
 #endif
 
 #if RETRO_RENDERDEVICE_SDL2 || RETRO_INPUTDEVICE_SDL2 || RETRO_AUDIODEVICE_SDL2
-#if RETRO_PLATFORM == RETRO_OSX
-// yeah, I dunno how you're meant to do the below with macOS frameworks so leaving this as is for rn :P
+#if RETRO_PLATFORM == RETRO_OSX || RETRO_PLATFORM == RETRO_PS3
+// yeah, I dunno how you're meant to do the below with macOS/PlayStation 3 frameworks so leaving this as is for rn :P
 #include <SDL2/SDL.h>
 #else
 // This is the way of including SDL that is recommended by the devs themselves:

@@ -52,10 +52,6 @@ int32 RSDK::gamePadCount               = 0;
 #include "Paddleboat/PDBInputDevice.cpp"
 #endif
 
-#if RETRO_INPUTDEVICE_PS3
-#include "PS3/PS3InputDevice.cpp"
-#endif
-
 void RSDK::RemoveInputDevice(InputDevice *targetDevice)
 {
     if (targetDevice) {
@@ -134,10 +130,6 @@ void RSDK::InitInputDevices()
 
 #if RETRO_INPUTDEVICE_PDBOAT
     SKU::InitPaddleboatInputAPI();
-#endif
-
-#if RETRO_INPUTDEVICE_PS3
-    SKU::InitPS3InputAPI();
 #endif
 }
 
