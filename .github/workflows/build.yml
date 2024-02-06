@@ -46,7 +46,7 @@ jobs:
       run: |
         cd RSDKv5.ps3
         export PKG_CONFIG_PATH=$PS3DEV/portlibs/ppu/lib/pkgconfig/
-        make
+        make clean
 
     - name: Push package artifact
       uses: actions/upload-artifact@v3
