@@ -37,6 +37,7 @@ jobs:
       run: |
         cd Sonic-Mania-Decompilation
         mv SonicMania ../RSDKv5
+        cd ..
         mv tinyxml2/* dependencies/all/tinyxml2
         mv stb/* dependencies/all/stb_vorbis
         
