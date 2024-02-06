@@ -23,7 +23,10 @@ jobs:
         git clone -b gcc-7.5.0 https://github.com/StrawFox64/PS3Toolchain.git
         sudo chmod -R 777 PS3Toolchain
         cd PS3Toolchain
+        sudo mkdir /usr/local/ps3dev
+        sudo chmod -R 777 /usr/local/ps3dev
         ./toolchain-sudo.sh
+  
     - name: Download dependencies (Project)
       run: |
         git clone https://github.com/nothings/stb.git
