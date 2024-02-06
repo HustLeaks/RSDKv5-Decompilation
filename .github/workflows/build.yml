@@ -9,15 +9,6 @@ jobs:
 
     - name: Checkout
       uses: actions/checkout@v3
-
-    - name: Add PSL1GHT Toolchain to path
-      run: |
-        export PS3DEV=${GITHUB_WORKSPACE}/ps3dev
-        export PSL1GHT=$PS3DEV
-        export PATH=$PATH:$PS3DEV/bin
-        export PATH=$PATH:$PS3DEV/ppu/bin
-        export PATH=$PATH:$PS3DEV/spu/bin
-        sudo mkdir $PS3DEV
         
     - name: Downlod Dependencies (Toolchain)
       run: |
@@ -32,7 +23,7 @@ jobs:
         git clone -b gcc-7.5.0 https://github.com/StrawFox64/PS3Toolchain.git
         sudo chmod -R 777 PS3Toolchain
         cd PS3Toolchain
-        ./toolchain.sh
+        ./toolchain-sudo.sh
     - name: Download dependencies (Project)
       run: |
         git clone https://github.com/nothings/stb.git
