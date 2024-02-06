@@ -11,19 +11,19 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Add PS3DEV to PATH
-      run: echo "PS3DEV=${GITHUB_WORKSPACE}/ps3dev" >> $GITHUB_PATH
+      run: echo "PS3DEV=${GITHUB_WORKSPACE}/ps3dev" >> $GITHUB_ENV
 
     - name: Add PSL1GHT to PATH
-      run: echo "PSL1GHT=\$PS3DEV" >> $GITHUB_PATH
+      run: echo "PSL1GHT=\$PS3DEV" >> $GITHUB_ENV
    
     - name: Add PS3DEV/bin to PATH
-      run: echo "PATH=\$PATH:\$PS3DEV/bin" >> $GITHUB_PATH
+      run: echo "PATH=\$PATH:\$PS3DEV/bin" >> $GITHUB_ENV
 
     - name: Add PS3DEV/ppu/bin to PATH
-      run: echo "PATH=\$PATH:\$PS3DEV/ppu/bin" >> $GITHUB_PATH
+      run: echo "PATH=\$PATH:\$PS3DEV/ppu/bin" >> $GITHUB_ENV
 
     - name: Add PS3DEV/spu/bin to PATH
-      run: echo "PATH=\$PATH:\$PS3DEV/spu/bin" >> $GITHUB_PATH
+      run: echo "PATH=\$PATH:\$PS3DEV/spu/bin" >> $GITHUB_ENV
 
     - name: Downlod Dependencies (Toolchain)
       run: |
