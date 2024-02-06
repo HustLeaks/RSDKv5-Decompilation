@@ -19,8 +19,7 @@ jobs:
 
     - name: Download PSL1GHT Toolchain
       run: |
-        curl -sL https://github.com/StrawFox64/StrawFox64.github.io/releases/download/ps3dev-GCC7.5.0-ubuntu/ps3dev.tar.gz
-        sudo tar -xvzf ps3dev.tar.gz -C /usr/local
+        curl -sL https://github.com/StrawFox64/StrawFox64.github.io/releases/download/ps3dev-GCC7.5.0-ubuntu/ps3dev.tar.gz | tar xvz -C /usr/local
   
     - name: Download dependencies (RSDK)
       run: |
