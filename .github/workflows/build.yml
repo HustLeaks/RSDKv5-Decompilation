@@ -25,7 +25,7 @@ jobs:
       # using pre-compiled sdk
     - name: Download PSL1GHT Toolchain
       run: |
-        curl -sL https://github.com/StrawFox64/StrawFox64.github.io/releases/download/ps3dev-GCC7.5.0(ubuntu)/ps3dev-GCC-7.5.0.tar.gz | tar xvz -C ./
+        curl -sL https://github.com/StrawFox64/StrawFox64.github.io/releases/download/ps3dev-GCC7.5.0-ubuntu/ps3dev-GCC-7.5.0.tar.gz | tar xvz -C ./
         
     - name: Build self
       run: |
