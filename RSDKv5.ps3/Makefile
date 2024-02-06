@@ -98,7 +98,7 @@ EXTRA_OFLAGS = -falign-functions  -falign-jumps \
 -fvect-cost-model=cheap
 
 RSDK_flags	=	-D__PS3__ -DRETRO_STANDALONE=0 -DRSDK_AUTOBUILD -DRETRO_USE_MOD_LOADER=0 -DRETRO_DISABLE_LOG
-CFLAGS		=	-g3 -O1 $(EXTRA_OFLAGS) -Wall -mcpu=cell $(MACHDEP) $(INCLUDE) $(RSDK_flags) -I$(PORTLIBS)/include
+CFLAGS		=	-g3 -O1 $(EXTRA_OFLAGS) -mcpu=cell $(MACHDEP) $(INCLUDE) $(RSDK_flags) -I$(PORTLIBS)/include
 CXXFLAGS	=	$(CFLAGS)
 
 LDFLAGS		=	$(MACHDEP) -Wl,-Map,$(notdir $@).map
