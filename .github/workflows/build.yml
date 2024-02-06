@@ -15,7 +15,6 @@ jobs:
         echo "sha_name=$(echo ${GITHUB_SHA} | cut -c1-8)" >> $GITHUB_ENV
         echo "PS3DEV=${GITHUB_WORKSPACE}/ps3dev7.5.0" >> $GITHUB_ENV
         echo "PSL1GHT=${GITHUB_WORKSPACE}/ps3dev7.5.0" >> $GITHUB_ENV
-        echo "export PATH=${GITHUB_WORKSPACE}/ps3dev7.5.0:\$PATH" >> $GITHUB_ENV
 
       # using pre-compiled sdk
     - name: Download PSL1GHT Toolchain
@@ -35,7 +34,7 @@ jobs:
         git clone https://github.com/leethomason/tinyxml2.git
         git clone https://github.com/StrawFox64/Sonic-Mania-Decompilation.git
         
-    - name: Move dependencies
+    - name: Move dependencies (Project)
       run: |
         cd Sonic-Mania-Decompilation
         mv SonicMania ../RSDKv5
@@ -46,7 +45,7 @@ jobs:
     - name: Build self
       run: |
         cd RSDKv5.ps3
-        export PKG_CONFIG_PATH=$(PS3DEV)/portlibs/ppu/lib/pkgconfig/
+        export PKG_CONFIG_PATH=$PS3DEV/portlibs/ppu/lib/pkgconfig/
         make
 
     - name: Push package artifact
