@@ -38,7 +38,7 @@ jobs:
     - name: Build self
       run: |
         cd RSDKv5.ps3
-        export PKG_CONFIG_PATH=/home/runner/work/RSDKv5-Decompilation/RSDKv5-Decompilation/ps3dev7.5.0/portlibs/ppu/lib/pkgconfig/
+        export PKG_CONFIG_PATH=$(PS3DEV)/portlibs/ppu/lib/pkgconfig/
         make
 
     - name: Push package artifact
