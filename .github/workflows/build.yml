@@ -10,17 +10,12 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Checkout SDL2
-      uses: actions/checkout@v3
-      with:
-        repository: StrawFox64/SDL2PSL1GHT
-        path: SDL2PSL1GHT
-
     - name: Set env vars
       run: |
         echo "sha_name=$(echo ${GITHUB_SHA} | cut -c1-8)" >> $GITHUB_ENV
         echo "PS3DEV=${GITHUB_WORKSPACE}/ps3dev7.5.0" >> $GITHUB_ENV
         echo "PSL1GHT=${GITHUB_WORKSPACE}/ps3dev7.5.0" >> $GITHUB_ENV
+        echo "PKG_CONFIG_PATH=$PS3DEV/portlibs/ppu/lib/pkgconfig/" >> $GITHUB_ENV
 
       # using pre-compiled sdk
     - name: Download PSL1GHT Toolchain
@@ -44,7 +39,6 @@ jobs:
     - name: Build self
       run: |
         cd RSDKv5.ps3
-        export PKG_CONFIG_PATH=$PS3DEV/portlibs/ppu/lib/pkgconfig/
         make
 
     - name: Push package artifact
