@@ -27,10 +27,10 @@ jobs:
 
     - name: Downlod Dependencies (Toolchain)
       run: |
-        sudo apt-get install -y autoconf automake bison flex gcc libelf-dev make
-        sudo apt-get install -y texinfo libncurses5-dev patch python2 python-is-python3 subversion wget zlib1g-dev
-        sudo apt-get install -y libtool libtool-bin python2-dev python-dev-is-python3 bzip2 libgmp3-dev pkg-config g++
-        sudo apt-get install -y libssl-dev clang nvidia-cg-toolkit
+       sudo apt-get install -y autoconf automake bison flex gcc libelf-dev make
+       sudo apt-get install -y texinfo libncurses5-dev patch python2 python-is-python3 subversion wget zlib1g-dev
+       sudo apt-get install -y libtool libtool-bin python2-dev python-dev-is-python3 bzip2 libgmp3-dev pkg-config g++
+       sudo apt-get install -y libssl-dev clang nvidia-cg-toolkit
 
       # using pre-compiled sdk
     - name: Download PSL1GHT Toolchain
