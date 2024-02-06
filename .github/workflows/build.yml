@@ -3,7 +3,7 @@ name: Build self
 on: [ push, pull_request, workflow_dispatch ]
 
 jobs:
-  build_pkg:
+  Build_config:
     runs-on: ubuntu-22.04
     steps:
 
@@ -15,7 +15,7 @@ jobs:
         echo "sha_name=$(echo ${GITHUB_SHA} | cut -c1-8)" >> $GITHUB_ENV
         echo "PS3DEV=${GITHUB_WORKSPACE}/ps3dev7.5.0" >> $GITHUB_ENV
         echo "PSL1GHT=${GITHUB_WORKSPACE}/ps3dev7.5.0" >> $GITHUB_ENV
-        echo "PKG_CONFIG_PATH=$PS3DEV/portlibs/ppu/lib/pkgconfig/" >> $GITHUB_ENV
+        echo "PKG_CONFIG_PATH=ps3dev7.5.0/portlibs/ppu/lib/pkgconfig/" >> $GITHUB_ENV
 
       # using pre-compiled sdk
     - name: Download PSL1GHT Toolchain
