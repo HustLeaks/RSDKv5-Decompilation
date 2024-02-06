@@ -29,7 +29,7 @@ jobs:
       
     - name: Download dependencies
       run: |
-        git clone https://github.com/nothings/stb.git stb_vorbis
+        git clone https://github.com/nothings/stb.git
         git clone https://github.com/leethomason/tinyxml2.git
         git clone https://github.com/StrawFox64/Sonic-Mania-Decompilation.git
         
@@ -37,10 +37,8 @@ jobs:
       run: |
         cd Sonic-Mania-Decompilation
         mv SonicMania ../RSDKv5
-        cd ..
         mv tinyxml2 dependencies/all
-        cd ../../
-        mv stb_vorbis dependencies/all
+        mv stb/* dependencies/all/stb_vorbis
         
     - name: Build self
       run: |
