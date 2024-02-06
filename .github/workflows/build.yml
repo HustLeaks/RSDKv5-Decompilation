@@ -26,6 +26,21 @@ jobs:
     - name: Download PSL1GHT Toolchain
       run: |
         curl -sL https://github.com/StrawFox64/StrawFox64.github.io/releases/download/ps3dev-GCC7.5.0-ubuntu/ps3dev-GCC-7.5.0.tar.gz | tar xvz -C ./
+      
+    - name: Download dependencies
+      run: |
+        git clone https://github.com/nothings/stb.git stb_vorbis
+        git clone https://github.com/leethomason/tinyxml2.git
+        git clone https://github.com/StrawFox64/Sonic-Mania-Decompilation.git
+        
+    - name: Move dependencies
+      run: |
+        cd Sonic-Mania-Decompilation
+        mv SonicMania ../RSDKv5
+        cd ..
+        mv tinyxml2 dependencies/all
+        cd ../../
+        mv stb_vorbis dependencies/all
         
     - name: Build self
       run: |
