@@ -10,18 +10,30 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Set env vars
+    - name: Add PSL1GHT Toolchain to path
       run: |
-        echo "sha_name=$(echo ${GITHUB_SHA} | cut -c1-8)" >> $GITHUB_ENV
-        echo "PS3DEV=${GITHUB_WORKSPACE}/ps3dev" >> $GITHUB_ENV
-        echo "PSL1GHT=${GITHUB_WORKSPACE}/ps3dev" >> $GITHUB_ENV
-
-      # using pre-compiled sdk
+        export PS3DEV=${GITHUB_WORKSPACE}/ps3dev
+        export PSL1GHT=$PS3DEV
+        export PATH=$PATH:$PS3DEV/bin
+        export PATH=$PATH:$PS3DEV/ppu/bin
+        export PATH=$PATH:$PS3DEV/spu/bin
+        sudo mkdir $PS3DEV
+        
+    - name: Downlod Dependencies (Toolchain)
+      run: |
+        sudo apt-get install -y autoconf automake bison flex gcc libelf-dev make
+        sudo apt-get install -y texinfo libncurses5-dev patch python2 python-is-python3 subversion wget zlib1g-dev
+        sudo apt-get install -y libtool libtool-bin python2-dev python-dev-is-python3 bzip2 libgmp3-dev pkg-config g++
+        sudo apt-get install -y libssl-dev clang nvidia-cg-toolkit
+        
+      # Download and make toolchain
     - name: Download PSL1GHT Toolchain
       run: |
-        curl -sL https://github.com/StrawFox64/StrawFox64.github.io/releases/download/ps3dev-GCC7.5.0-ubuntu/ps3dev-GCC-7.5.0.tar.gz | tar xvz -C ./
-
-    - name: Download dependencies
+        git clone -b gcc-7.5.0 https://github.com/StrawFox64/PS3Toolchain.git
+        sudo chmod -R 777 PS3Toolchain
+        cd PS3Toolchain
+        ./toolchain.sh
+    - name: Download dependencies (Project)
       run: |
         git clone https://github.com/nothings/stb.git
         git clone https://github.com/leethomason/tinyxml2.git
@@ -30,8 +42,7 @@ jobs:
     - name: Move dependencies (Project)
       run: |
         cd Sonic-Mania-Decompilation
-        mv SonicMania ../RSDKv5
-        cd ..
+        mv SonicMania ../RSDKv5 && cd ..
         mv tinyxml2/* dependencies/all/tinyxml2
         mv stb/* dependencies/all/stb_vorbis
         
@@ -40,7 +51,6 @@ jobs:
         cd RSDKv5.ps3
         export PKG_CONFIG_PATH=$PS3DEV/portlibs/ppu/lib/pkgconfig/
         make
-
     - name: Push package artifact
       uses: actions/upload-artifact@v3
       with:
