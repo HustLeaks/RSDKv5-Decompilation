@@ -1,9 +1,9 @@
-name: Build self
+name: Build RSDK
 
 on: [ push, pull_request, workflow_dispatch ]
 
 jobs:
-  Build_config:
+  Build_ps3:
     runs-on: ubuntu-22.04
     steps:
 
@@ -15,7 +15,6 @@ jobs:
         echo "sha_name=$(echo ${GITHUB_SHA} | cut -c1-8)" >> $GITHUB_ENV
         echo "PS3DEV=${GITHUB_WORKSPACE}/ps3dev7.5.0" >> $GITHUB_ENV
         echo "PSL1GHT=${GITHUB_WORKSPACE}/ps3dev7.5.0" >> $GITHUB_ENV
-        echo "PKG_CONFIG_PATH=ps3dev7.5.0/portlibs/ppu/lib/pkgconfig/" >> $GITHUB_ENV
 
       # using pre-compiled sdk
     - name: Download PSL1GHT Toolchain
@@ -39,6 +38,7 @@ jobs:
     - name: Build self
       run: |
         cd RSDKv5.ps3
+        export PKG_CONFIG_PATH=/home/runner/work/RSDKv5-Decompilation/RSDKv5-Decompilation/ps3dev7.5.0/portlibs/ppu/lib/pkgconfig/
         make
 
     - name: Push package artifact
