@@ -10,16 +10,20 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Set env vars
-      run: |
-        echo "sha_name=$(echo ${GITHUB_SHA} | cut -c1-8)" >> $GITHUB_ENV
-        echo "PS3DEV=${GITHUB_WORKSPACE}/ps3dev7.5.0" >> $GITHUB_ENV
-        echo "PSL1GHT=${GITHUB_WORKSPACE}/ps3dev7.5.0" >> $GITHUB_ENV
+      - name: Add PS3DEV to PATH
+        run: echo "PS3DEV=${GITHUB_WORKSPACE}/ps3dev" >> $GITHUB_PATH
 
-      # using pre-compiled sdk
-    - name: Download PSL1GHT Toolchain
-      run: |
-        curl -sL https://github.com/StrawFox64/StrawFox64.github.io/releases/download/ps3dev-GCC7.5.0-ubuntu/ps3dev-GCC-7.5.0.tar.gz | tar xvz -C ./
+     - name: Add PSL1GHT to PATH
+       run: echo "PSL1GHT=\$PS3DEV" >> $GITHUB_PATH
+   
+     - name: Add PS3DEV/bin to PATH
+       run: echo "PATH=\$PATH:\$PS3DEV/bin" >> $GITHUB_PATH
+
+     - name: Add PS3DEV/ppu/bin to PATH
+       run: echo "PATH=\$PATH:\$PS3DEV/ppu/bin" >> $GITHUB_PATH
+
+     - name: Add PS3DEV/spu/bin to PATH
+       run: echo "PATH=\$PATH:\$PS3DEV/spu/bin" >> $GITHUB_PATH
 
     - name: Downlod Dependencies (Toolchain)
       run: |
@@ -27,6 +31,14 @@ jobs:
         sudo apt-get install -y texinfo libncurses5-dev patch python2 python-is-python3 subversion wget zlib1g-dev
         sudo apt-get install -y libtool libtool-bin python2-dev python-dev-is-python3 bzip2 libgmp3-dev pkg-config g++
         sudo apt-get install -y libssl-dev clang nvidia-cg-toolkit
+
+      # using pre-compiled sdk
+    - name: Download PSL1GHT Toolchain
+      run: |
+        git clone -b gcc-7.5.0 https://github.com/StrawFox64/PS3Toolchain.git
+        sudo chmod -R 777 PS3Toolchain
+        cd PS3Toolchain
+        ./toolchain.sh
 
     - name: Download dependencies (Project)
       run: |
@@ -46,7 +58,7 @@ jobs:
       run: |
         cd RSDKv5.ps3
         export PKG_CONFIG_PATH=$PS3DEV/portlibs/ppu/lib/pkgconfig/
-        make clean
+        make
 
     - name: Push package artifact
       uses: actions/upload-artifact@v3
