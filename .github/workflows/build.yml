@@ -9,31 +9,26 @@ jobs:
 
     - name: Checkout
       uses: actions/checkout@v3
-        
+
     - name: Downlod Dependencies (Toolchain)
       run: |
-        sudo apt-get install -y autoconf automake bison flex gcc libelf-dev make
-        sudo apt-get install -y texinfo libncurses5-dev patch python2 python-is-python3 subversion wget zlib1g-dev
-        sudo apt-get install -y libtool libtool-bin python2-dev python-dev-is-python3 bzip2 libgmp3-dev pkg-config g++
-        sudo apt-get install -y libssl-dev clang nvidia-cg-toolkit
-        
-      # Download and make toolchain
+        sudo apt-get install -y autoconf automake bison flex gcc libelf-dev make \
+        texinfo libncurses5-dev patch python2 python-is-python3 subversion wget zlib1g-dev \
+        libtool libtool-bin python2-dev python-dev-is-python3 bzip2 libgmp3-dev pkg-config g++ \
+        libssl-dev clang nvidia-cg-toolkit
+
     - name: Download PSL1GHT Toolchain
       run: |
-        git clone -b gcc-7.5.0 https://github.com/StrawFox64/PS3Toolchain.git
-        sudo chmod -R 777 PS3Toolchain
-        cd PS3Toolchain
-        sudo mkdir /usr/local/ps3dev
-        sudo chmod -R 777 /usr/local/ps3dev
-        ./toolchain-sudo.sh
+        curl -sL 
+        sudo tar -xzf ps3dev-gcc7.5.0.tar.gz -C /usr/local
   
-    - name: Download dependencies (Project)
+    - name: Download dependencies (RSDK)
       run: |
         git clone https://github.com/nothings/stb.git
         git clone https://github.com/leethomason/tinyxml2.git
         git clone https://github.com/StrawFox64/Sonic-Mania-Decompilation.git
         
-    - name: Move dependencies (Project)
+    - name: Move dependencies (RSDK)
       run: |
         cd Sonic-Mania-Decompilation
         mv SonicMania ../RSDKv5 && cd ..
@@ -43,7 +38,7 @@ jobs:
     - name: Build self
       run: |
         cd RSDKv5.ps3
-        export PKG_CONFIG_PATH=$PS3DEV/portlibs/ppu/lib/pkgconfig/
+        ./path.sh
         make
     - name: Push package artifact
       uses: actions/upload-artifact@v3
