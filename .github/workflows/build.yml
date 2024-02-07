@@ -20,8 +20,8 @@ jobs:
     - name: Configure environment
       run: |
         echo "PS3DEV=/usr/local/ps3dev" >> $GITHUB_ENV
-        echo "PSL1GHT=${env.PS3DEV}" >> $GITHUB_ENV
-        echo "PKG_CONFIG_PATH=${env.PS3DEV}/portlibs/ppu/lib/pkgconfig" >> $GITHUB_ENV
+        echo "PSL1GHT=/usr/local/ps3dev" >> $GITHUB_ENV
+        echo "PKG_CONFIG_PATH=/usr/local/ps3dev/portlibs/ppu/lib/pkgconfig" >> $GITHUB_ENV
         echo "sha_name=$(echo ${GITHUB_SHA} | cut -c1-8)" >> $GITHUB_ENV
 
     - name: Download PSL1GHT Toolchain
