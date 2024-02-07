@@ -36,8 +36,8 @@ jobs:
         
     - name: Build self
       run: |
+        ./path.sh
         cd RSDKv5.ps3
-        sudo ./path.sh
         make
     - name: Push package artifact
       uses: actions/upload-artifact@v3
