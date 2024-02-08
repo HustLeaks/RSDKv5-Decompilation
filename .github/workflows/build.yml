@@ -37,12 +37,23 @@ jobs:
     - name: Build self
       run: |
         cd RSDKv5.ps3 && make && mv RSDKv5.self EBOOT.BIN
-        
-    - name: Push package artifact
-      uses: actions/upload-artifact@v3
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        name: RSDKv5_${{ env.sha_name }}
-        path: RSDKv5.ps3/EBOOT.BIN
-        if-no-files-found: error
-        # don't keep artifacts for too long
-        retention-days: 7
+        tag_name: test
+        release_name: Release test
+        body: Release notes for test
+
+    - name: Upload Release
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: RSDKv5.ps3/EBOOT.BIN
+        asset_name: EBOOT.BIN
+        asset_content_type: application/zip
