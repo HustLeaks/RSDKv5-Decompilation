@@ -36,13 +36,13 @@ jobs:
         
     - name: Build self
       run: |
-        cd RSDKv5.ps3 && make
+        cd RSDKv5.ps3 && make && mv RSDKv5.self EBOOT.BIN
         
     - name: Push package artifact
       uses: actions/upload-artifact@v3
       with:
         name: RSDKv5_${{ env.sha_name }}
-        path: RSDKv5.ps3/RSDKv5.self
+        path: RSDKv5.ps3/EBOOT.BIN
         if-no-files-found: error
         # don't keep artifacts for too long
         retention-days: 7
