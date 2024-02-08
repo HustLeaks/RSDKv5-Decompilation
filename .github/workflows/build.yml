@@ -18,7 +18,7 @@ jobs:
         echo "sha_name=$(echo ${GITHUB_SHA} | cut -c1-8)" >> $GITHUB_ENV
     - name: Download PSL1GHT Toolchain
       run: |
-        curl -sL https://github.com/StrawFox64/StrawFox64.github.io/releases/download/ps3dev-GCC7.5.0-ubuntu/ps3dev.tar.gz | sudo tar xvz -C /usr/local
+        curl -sL https://github.com/StrawFox64/StrawFox64.github.io/releases/download/psl1ght-gcc7.5.0-ubuntu-22.04/ps3dev.tar.gz | sudo tar xvz -C /usr/local
   
     - name: Download dependencies (RSDK)
       run: |
