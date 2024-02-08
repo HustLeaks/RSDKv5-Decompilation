@@ -38,15 +38,26 @@ jobs:
       run: |
         cd RSDKv5.ps3 && make && mv RSDKv5.self EBOOT.BIN
 
+    - name: Generate Release Info
+      id: release_info
+      run: |
+        TAG=$(git describe --abbrev=0 --tags)
+        COMMITS=$(git log --oneline $(git describe --abbrev=0 --tags)..HEAD)
+        RELEASE_NAME="Release $TAG"
+        BODY="Release notes for $TAG\n\n$COMMITS"
+        echo "::set-output name=tag::$TAG"
+        echo "::set-output name=release_name::$RELEASE_NAME"
+        echo "::set-output name=body::$BODY"
+    
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: test
-        release_name: Release test
-        body: Release notes for test
+        tag_name: ${{ steps.release_info.outputs.tag }}
+        release_name: ${{ steps.release_info.outputs.release_name }}
+        body: ${{ steps.release_info.outputs.body }}
 
     - name: Upload Release
       uses: actions/upload-release-asset@v1
