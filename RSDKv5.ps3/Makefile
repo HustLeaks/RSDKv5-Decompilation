@@ -51,54 +51,8 @@ CONTENTID	:=	UP0001-$(APPID)_00-0000000000000000
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------
-# you may be asking why on did i put the -O2 optimization flags manually?
-# this happens because the optimizations -O2 table does not work here, because of some unknown bug
-# This bug occurs with flag -fcode-hoisting, for some reason if you use separator in it the execution does not work
-# and if you remove the separator, the compiler does not let you compile because it does not have a separator
-# but if you take out the separator and move it up the flag -freorder-blocks-algorithm=stc, it works mysteriously
-# below and the complete table with a small change.
-
-EXTRA_OFLAGS = -falign-functions  -falign-jumps \
--falign-labels  -falign-loops \
--fcaller-saves \
--fcrossjumping \
--fcse-follow-jumps  -fcse-skip-blocks \
--fdelete-null-pointer-checks \
--fdevirtualize  -fdevirtualize-speculatively \
--fexpensive-optimizations \
--fsplit-loops \
--fgcse  -fgcse-lm \
--fhoist-adjacent-loads \
--finline-functions \
--finline-small-functions \
--findirect-inlining \
--fipa-bit-cp  -fipa-cp  -fipa-icf \
--fipa-ra  -fipa-sra  -fipa-vrp \
--fisolate-erroneous-paths-dereference \
--flra-remat \
--foptimize-sibling-calls \
--foptimize-strlen \
--fpartial-inlining \
--fpeephole2 \
--fcode-hoisting
--freorder-blocks-algorithm=stc \
--freorder-blocks-and-partition  -freorder-functions \
--frerun-cse-after-loop \
--fschedule-insns -fschedule-insns2 \
--fsched-interblock  -fsched-spec \
--fstore-merging \
--fstrict-aliasing \
--fthread-jumps \
--ftree-builtin-call-dce \
--ftree-loop-vectorize \
--ftree-pre \
--ftree-slp-vectorize \
--ftree-switch-conversion  -ftree-tail-merge \
--ftree-vrp \
--fvect-cost-model=cheap
-
 RSDK_flags	=	-D__PS3__ -DRETRO_STANDALONE=0 -DRSDK_AUTOBUILD -DRETRO_USE_MOD_LOADER=0 -DRETRO_DISABLE_LOG
-CFLAGS		=	-g3 -O1 $(EXTRA_OFLAGS) -mcpu=cell $(MACHDEP) $(INCLUDE) $(RSDK_flags) -I$(PORTLIBS)/include
+CFLAGS		=	-O2 -mcpu=cell $(MACHDEP) $(INCLUDE) $(RSDK_flags) -I$(PORTLIBS)/include
 CXXFLAGS	=	$(CFLAGS)
 
 LDFLAGS		=	$(MACHDEP) -Wl,-Map,$(notdir $@).map
@@ -182,7 +136,6 @@ clean:
 #---------------------------------------------------------------------------------
 run:
 	ps3load $(OUTPUT).self
-
 
 #---------------------------------------------------------------------------------
 else
