@@ -96,8 +96,13 @@ void RenderDevice::FlipScreen()
 
     // Clear the screen. This is needed to keep the
     // pillarboxes in fullscreen from displaying garbage data.
+
+	// this causes the game to slow down when starting and crash the special stages at 30fps.
+	// this only serves to clear the screen, I don't know if it will be able to cause any visual effect not expected.
+#if RETRO_PLATFORM != RETRO_PS3
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0xFF);
     SDL_RenderClear(renderer);
+#endif
 
 #if (SDL_COMPILEDVERSION >= SDL_VERSIONNUM(2, 0, 18))
     int32 startVert = 0;

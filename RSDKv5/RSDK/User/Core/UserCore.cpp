@@ -279,12 +279,8 @@ void RSDK::LoadSettingsINI()
     platform = gameVerInfo.platform;
 #endif
 
-#if RETRO_PLATFORM == RETRO_PS3
-    bool32 useBuffer = false;
-#else
     // Consoles load the entire file and buffer it, while PC just io's the file when needed
     bool32 useBuffer = !(platform == PLATFORM_PC || platform == PLATFORM_DEV);
-#endif
 
     char pathBuffer[0x100];
     sprintf_s(pathBuffer, sizeof(pathBuffer), "%sSettings.ini", SKU::userFileDir);

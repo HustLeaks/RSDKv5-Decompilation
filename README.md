@@ -7,7 +7,6 @@
 * The sound after a few stages stops playing (just the music (it is possible to fix this by closing and opening the game)).
 * Opening xmb after a few minutes of play. Makes it charge infinitely (but it is still possible to turn off the console by holding the PS button (Do not use the "Quit Game" option as it will load infinitely)).
 * Debug Menu not tested.
-* Low performance still in some leveis (Special stages extremely low performance, and normal stages some with problems such as Flying Battery Zone have brief slowdowns of little time).
 * Save states unavailable (~~if you create an iso~~. (If you run the game in folder mode, saving is available)).
 
 # How to start
@@ -17,9 +16,9 @@ Read [Here](BUILDING.md).
 
 * Make the data.rsdk files works.
 * Fix the sound. (Partially fixed)
-* Fix performance. (normal levels (Partially fixed) and special stages (Need fixed))
-* ~~Make the game not crash when exiting.~~ (Fixed)
-* ~~Improve control input.~~ (Fixed)
+* ~~Fix performance.~~ (Done)
+* ~~Make the game not crash when exiting.~~ (Done)
+* ~~Improve control input.~~ (Done)
 * Two player support with controller.
 * Make saves stay on hdd.
 * anything else?
