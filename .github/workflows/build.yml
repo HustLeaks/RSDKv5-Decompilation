@@ -45,12 +45,3 @@ jobs:
         if-no-files-found: error
         # don't keep artifacts for too long
         retention-days: 7
-
-  release:
-    name: "Release"
-    runs-on: "ubuntu-latest"
-    steps:
-      - uses: "marvinpinto/action-automatic-releases@latest"
-        with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          prerelease: false
