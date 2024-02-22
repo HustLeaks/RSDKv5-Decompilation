@@ -46,8 +46,31 @@ jobs:
     - name: Push package artifact
       uses: actions/upload-artifact@v4.3.1
       with:
-        name: RSDKv5_${{ env.sha_name }}_${{ env.ab }}
+        name: RSDKv5_${{ env.sha_name }}
         path: .github/workflows/EBOOT.BIN
         if-no-files-found: error
         # don't keep artifacts for too long
         retention-days: 7
+
+    - name: Create Release
+      id: release
+      uses: actions/create-release@v1.1.4
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v0.3.${{ env.ab }}
+        release_name: RSDKv5 Release
+        body: Testing
+        draft: false
+        prerelease: false
+
+    - name: Upload artifact
+      id: upload-artifact
+      uses: actions/upload-release-asset@v1.1.3
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.release.outputs.upload_url }}
+        asset_path: .github/workflows/EBOOT.BIN
+        asset_name: EBOOT.BIN
+        asset_content_type: application/octet-stream
