@@ -31,11 +31,6 @@ jobs:
         git tag v${{ env.ad }}.${{ env.ac }}.${{ env.ab }}
         git push origin v${{ env.ad }}.${{ env.ac }}.${{ env.ab }}
         
-    - name: More tag
-      run: |
-        export ae=git fetch --tags && git checkout $(git describe --tags `git rev-list --tags --max-count=1`)
-        echo "af=$ae" >> $GITHUB_ENV
-      
     - name: Download PSL1GHT Toolchain
       run: |
         curl -sL https://github.com/StrawFox64/StrawFox64.github.io/releases/download/psl1ght-gcc7.5.0-ubuntu-22.04/ps3dev.tar.gz | sudo tar xvz -C /usr/local
@@ -70,9 +65,9 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: v{{ env.af }}
+        tag_name: v${{ env.ad }}.${{ env.ac }}.${{ env.ab }}
         release_name: RSDKv5 Release
-        body: Version ${{ env.af }}
+        body: Version v${{ env.ad }}.${{ env.ac }}.${{ env.ab }}
         draft: false
         prerelease: false
 
