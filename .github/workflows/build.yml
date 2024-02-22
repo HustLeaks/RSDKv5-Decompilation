@@ -25,11 +25,15 @@ jobs:
         echo "sha_name=$(echo ${GITHUB_SHA} | cut -c1-8)" >> $GITHUB_ENV
         echo "ac=3" >> $GITHUB_ENV # Tag
         echo "ad=0" >> $GITHUB_ENV # Tag
+        echo "af=3 && ae=0" >> $GITHUB_ENV # bug?
                 
     - name: Create Tag
       run: |
+        git tag v${{ env.ae }}.${{ env.af }}.${{ env.ab }}
+        git push origin v${{ env.ae }}.${{ env.af }}.${{ env.ab }}     
+        
         git tag v${{ env.ad }}.${{ env.ac }}.${{ env.ab }}
-        git push origin v${{ env.ad }}.${{ env.ac }}.${{ env.ab }}
+        git push origin v${{ env.ad }}.${{ env.ac }}.${{ env.ab }}  
         
     - name: Download PSL1GHT Toolchain
       run: |
