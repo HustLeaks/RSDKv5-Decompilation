@@ -22,14 +22,15 @@ jobs:
         echo "PS3DEV=/usr/local/ps3dev" >> $GITHUB_ENV
         echo "PSL1GHT=/usr/local/ps3dev" >> $GITHUB_ENV
         echo "PKG_CONFIG_PATH=/usr/local/ps3dev/portlibs/ppu/lib/pkgconfig" >> $GITHUB_ENV
-        echo "sha_name=$(echo ${GITHUB_SHA} | cut -c1-8)" >> $GITHUB_ENV
         echo "ac=3" >> $GITHUB_ENV # Tag
         echo "ad=0" >> $GITHUB_ENV # Tag
                 
     - name: Create Tag
       run: |
-        git tag v${{ env.ad }}.${{ env.ac }}.${{ env.ab }}
-        git push origin v${{ env.ad }}.${{ env.ac }}.${{ env.ab }}
+        export ae=v${{ env.ad }}.${{ env.ac }}.${{ env.ab }}
+        git tag $ae
+        git push origin $ae
+        echo "af=$ae" >> $GITHUB_ENV
         
     - name: Download PSL1GHT Toolchain
       run: |
@@ -53,7 +54,7 @@ jobs:
     - name: Push package artifact
       uses: actions/upload-artifact@v4.3.1
       with:
-        name: RSDKv5_${{ env.sha_name }}
+        name: RSDKv5_${{ env.af }}
         path: .github/workflows/EBOOT.BIN
         if-no-files-found: error
         # don't keep artifacts for too long
@@ -67,7 +68,7 @@ jobs:
       with:
         tag_name: v${{ env.ad }}.${{ env.ac }}.${{ env.ab }}
         release_name: Release of RSDKv5 for PlayStation 3
-        body: Version v${{ env.ad }}.${{ env.ac }}.${{ env.ab }}
+        body: Version ${{ env.af }}
         draft: false
         prerelease: false
 
@@ -78,5 +79,5 @@ jobs:
       with:
           upload_url: ${{ steps.release.outputs.upload_url }}
           asset_path: .github/workflows/EBOOT.BIN
-          asset_name: RSDKv5_${{ env.sha_name }}
+          asset_name: RSDKv5_${{ env.af }}
           asset_content_type: application/zip
