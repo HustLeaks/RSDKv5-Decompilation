@@ -14,7 +14,7 @@ jobs:
       run: |
         git clone https://github.com/StrawFox64/RSDKv5-Decompilation.git
         cd RSDKv5-Decompilation
-        export aa=$(git rev-list --count --author=StrawFox64 origin/master)
+        export aa=$(git rev-list --count --author=StrawFox64 origin/test-zone)
         echo "ab=$aa" >> $GITHUB_ENV
 
     - name: Configure environment
