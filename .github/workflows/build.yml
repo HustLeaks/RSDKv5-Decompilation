@@ -23,6 +23,12 @@ jobs:
         echo "PSL1GHT=/usr/local/ps3dev" >> $GITHUB_ENV
         echo "PKG_CONFIG_PATH=/usr/local/ps3dev/portlibs/ppu/lib/pkgconfig" >> $GITHUB_ENV
         echo "sha_name=$(echo ${GITHUB_SHA} | cut -c1-8)" >> $GITHUB_ENV
+        echo "ac=3 && ad=0" >> $GITHUB_ENV # Tag
+                
+    - name: Create Tag
+      run: |
+        git tag v${{ env.ad }}.${{ env.ac }}.${{ env.ab }}
+        git push origin v${{ env.ad }}.${{ env.ac }}.${{ env.ab }}
         
     - name: Download PSL1GHT Toolchain
       run: |
@@ -58,9 +64,9 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: v0.3.${{ env.ab }}
+        tag_name: v${{ env.ad }}.${{ env.ac }}.${{ env.ab }}
         release_name: RSDKv5 Release
-        body: Version v0.3.${{ env.ab }}
+        body: Version v${{ env.ad }}.${{ env.ac }}.${{ env.ab }}
         draft: false
         prerelease: false
 
