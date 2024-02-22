@@ -28,14 +28,12 @@ jobs:
       run: |
         curl -sL https://github.com/StrawFox64/StrawFox64.github.io/releases/download/psl1ght-gcc7.5.0-ubuntu-22.04/ps3dev.tar.gz | sudo tar xvz -C /usr/local
   
-    - name: Download dependencies (RSDK)
+    - name: Dependencies (RSDK)
       run: |
         git clone https://github.com/nothings/stb.git
         git clone https://github.com/leethomason/tinyxml2.git
         git clone https://github.com/StrawFox64/Sonic-Mania-Decompilation.git
-        
-    - name: Move dependencies (RSDK)
-      run: |
+          # Move dependencies
         cd Sonic-Mania-Decompilation
         mv SonicMania ../RSDKv5 && cd ..
         mv tinyxml2/* dependencies/all/tinyxml2
