@@ -10,14 +10,19 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4.1.1
 
+    - name: Count Commits
+      run: |
+        git clone https://github.com/StrawFox64/RSDKv5-Decompilation.git
+        cd RSDKv5-Decompilation
+        export aa=$(git rev-list --count --author=StrawFox64 origin/master)
+        echo "ab=$aa" >> $GITHUB_ENV
+
     - name: Configure environment
       run: |
         echo "PS3DEV=/usr/local/ps3dev" >> $GITHUB_ENV
         echo "PSL1GHT=/usr/local/ps3dev" >> $GITHUB_ENV
         echo "PKG_CONFIG_PATH=/usr/local/ps3dev/portlibs/ppu/lib/pkgconfig" >> $GITHUB_ENV
         echo "sha_name=$(echo ${GITHUB_SHA} | cut -c1-8)" >> $GITHUB_ENV
-        export aa=$(git rev-list --count --author=StrawFox64)
-        echo "ab=$aa" >> $GITHUB_ENV
         
     - name: Download PSL1GHT Toolchain
       run: |
