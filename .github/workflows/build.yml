@@ -66,7 +66,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: v${{ env.ad }}.${{ env.ac }}.${{ env.ab }}
-        release_name: RSDKv5 Release
+        release_name: Release of RSDKv5 for PlayStation 3
         body: Version v${{ env.ad }}.${{ env.ac }}.${{ env.ab }}
         draft: false
         prerelease: false
@@ -76,7 +76,7 @@ jobs:
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          upload_url: ${{ steps.release.outputs.upload_url }}
           asset_path: .github/workflows/EBOOT.BIN
           asset_name: RSDKv5_${{ env.sha_name }}
           asset_content_type: application/zip
