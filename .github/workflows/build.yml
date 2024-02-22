@@ -16,8 +16,8 @@ jobs:
         echo "PSL1GHT=/usr/local/ps3dev" >> $GITHUB_ENV
         echo "PKG_CONFIG_PATH=/usr/local/ps3dev/portlibs/ppu/lib/pkgconfig" >> $GITHUB_ENV
         echo "sha_name=$(echo ${GITHUB_SHA} | cut -c1-8)" >> $GITHUB_ENV
-        echo "aa=git rev-list --count --author=StrawFox64 origin/master" >> $GITHUB_ENV
-        echo "${{ env.aa }}=ab" >> $GITHUB_ENV
+        export aa=$(git rev-list --count --author=StrawFox64 origin/master)
+        echo "ab=$aa" >> $GITHUB_ENV
         
     - name: Download PSL1GHT Toolchain
       run: |
