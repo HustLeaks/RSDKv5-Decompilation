@@ -71,6 +71,11 @@ jobs:
         body: Version ${{ env.af }}
         draft: false
         prerelease: false
+        
+    - name: Download Artifact
+      uses: actions/download-artifact@v4.1.2
+      with:
+        name: RSDKv5_${{ env.af }}
 
     - name: Upload artifact
       uses: actions/upload-release-asset@v1
@@ -79,7 +84,7 @@ jobs:
       with:
           upload_url: ${{ steps.release.outputs.upload_url }}
           asset_path: .github/workflows/EBOOT.BIN
-          asset_name: RSDKv5_${{ env.af }}
+          asset_name: RSDKv5_${{ env.af }}.zip
           asset_content_type: application/zip
 
 ## Original Workflow
