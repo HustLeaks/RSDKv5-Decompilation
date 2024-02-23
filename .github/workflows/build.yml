@@ -75,7 +75,7 @@ jobs:
     - name: Download Artifact
       uses: actions/download-artifact@v4.1.2
       with:
-        path: .github/workflows/
+        path: RSDKv5.ps3
         
     - name: Upload artifact
       uses: actions/upload-release-asset@v1
@@ -83,6 +83,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
           upload_url: ${{ steps.release.outputs.upload_url }}
-          asset_path: .github/workflows/
+          asset_path: RSDKv5.ps3/RSDKv5_${{ env.af }}.zip
           asset_name: RSDKv5_${{ env.af }}.zip
           asset_content_type: application/zip
