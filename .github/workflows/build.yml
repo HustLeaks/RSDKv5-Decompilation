@@ -10,13 +10,13 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4.1.1
 
-    - name: Count Commits
+    - name: Set a version
       run: |
         git clone https://github.com/StrawFox64/RSDKv5-Decompilation.git
         cd RSDKv5-Decompilation
-        export aa=$(git rev-list --count --author=StrawFox64 origin/test-zone)
+        export aa=$(git rev-list --count --author=StrawFox64 origin/master)
         echo "ab=$aa" >> $GITHUB_ENV
-
+        
     - name: Configure environment
       run: |
         echo "PS3DEV=/usr/local/ps3dev" >> $GITHUB_ENV
@@ -49,13 +49,13 @@ jobs:
         
     - name: Build self
       run: |
-        cd .github/workflows && make && mv RSDKv5.self EBOOT.BIN
+        cd .github/workflows && make
         
     - name: Push package artifact
       uses: actions/upload-artifact@v4.3.1
       with:
         name: RSDKv5_${{ env.af }}
-        path: .github/workflows/EBOOT.BIN
+        path: .github/workflows/RSDKv5.self
         if-no-files-found: error
         # don't keep artifacts for too long
         retention-days: 7
@@ -71,18 +71,13 @@ jobs:
         body: Version ${{ env.af }}
         draft: false
         prerelease: true
-        
-    - name: Download Artifact
-      uses: actions/download-artifact@v4.1.2
-      with:
-        path: RSDKv5.ps3/
-        
+
     - name: Upload artifact
       uses: actions/upload-release-asset@v1
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
           upload_url: ${{ steps.release.outputs.upload_url }}
-          asset_path: RSDKv5.ps3/
-          asset_name: RSDKv5_${{ env.af }}.zip
+          asset_path: .github/workflows/RSDKv5.self
+          asset_name: EBOOT.BIN
           asset_content_type: application/zip
