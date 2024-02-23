@@ -8,27 +8,40 @@ jobs:
     steps:
 
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4.1.1
+
+    - name: Count Commits
+      run: |
+        git clone https://github.com/StrawFox64/RSDKv5-Decompilation.git
+        cd RSDKv5-Decompilation
+        export aa=$(git rev-list --count --author=StrawFox64 origin/test-zone)
+        echo "ab=$aa" >> $GITHUB_ENV
 
     - name: Configure environment
       run: |
         echo "PS3DEV=/usr/local/ps3dev" >> $GITHUB_ENV
         echo "PSL1GHT=/usr/local/ps3dev" >> $GITHUB_ENV
         echo "PKG_CONFIG_PATH=/usr/local/ps3dev/portlibs/ppu/lib/pkgconfig" >> $GITHUB_ENV
-        echo "sha_name=$(echo ${GITHUB_SHA} | cut -c1-8)" >> $GITHUB_ENV
+        echo "ac=3" >> $GITHUB_ENV # Tag
+        echo "ad=0" >> $GITHUB_ENV # Tag
+                
+    - name: Create Tag
+      run: |
+        export ae=v${{ env.ad }}.${{ env.ac }}.${{ env.ab }}
+        git tag $ae
+        git push origin $ae
+        echo "af=$ae" >> $GITHUB_ENV
         
     - name: Download PSL1GHT Toolchain
       run: |
         curl -sL https://github.com/StrawFox64/StrawFox64.github.io/releases/download/psl1ght-gcc7.5.0-ubuntu-22.04/ps3dev.tar.gz | sudo tar xvz -C /usr/local
   
-    - name: Download dependencies (RSDK)
+    - name: Dependencies (RSDK)
       run: |
         git clone https://github.com/nothings/stb.git
         git clone https://github.com/leethomason/tinyxml2.git
         git clone https://github.com/StrawFox64/Sonic-Mania-Decompilation.git
-        
-    - name: Move dependencies (RSDK)
-      run: |
+          # Move dependencies
         cd Sonic-Mania-Decompilation
         mv SonicMania ../RSDKv5 && cd ..
         mv tinyxml2/* dependencies/all/tinyxml2
@@ -39,13 +52,35 @@ jobs:
         cd .github/workflows && make && mv RSDKv5.self EBOOT.BIN
         
     - name: Push package artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4.3.1
       with:
-        name: RSDKv5_${{ env.sha_name }}
+        name: RSDKv5_${{ env.af }}
         path: .github/workflows/EBOOT.BIN
         if-no-files-found: error
         # don't keep artifacts for too long
         retention-days: 7
+
+    - name: Create Release
+      id: release
+      uses: actions/create-release@v1.1.4
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ env.ad }}.${{ env.ac }}.${{ env.ab }}
+        release_name: Release of RSDKv5 for PlayStation 3
+        body: Version ${{ env.af }}
+        draft: false
+        prerelease: false
+
+    - name: Upload artifact
+      uses: actions/upload-release-asset@v1
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+          upload_url: ${{ steps.release.outputs.upload_url }}
+          asset_path: .github/workflows/EBOOT.BIN
+          asset_name: RSDKv5_${{ env.af }}
+          asset_content_type: application/zip
 
 ## Original Workflow
 #name: Build RSDKv5

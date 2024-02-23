@@ -57,7 +57,7 @@ CONTENTID	:=	UP0001-$(APPID)_00-0000000000000000
 # options for code generation
 #---------------------------------------------------------------------------------
 RSDK_flags	=	-D__PS3__ -DRETRO_STANDALONE=0 -DRSDK_AUTOBUILD -DRETRO_USE_MOD_LOADER=0 -DRETRO_DISABLE_LOG
-CFLAGS		=	-O2 -mcpu=cell $(MACHDEP) $(INCLUDE) $(RSDK_flags) -I$(PORTLIBS)/include
+CFLAGS		=	-O2 -mcpu=cell $(MACHDEP) $(INCLUDE) $(RSDK_flags)
 CXXFLAGS	=	$(CFLAGS)
 
 LDFLAGS		=	$(MACHDEP) -Wl,-Map,$(notdir $@).map
@@ -71,7 +71,7 @@ LIBS	:=	$(shell pkg-config --libs sdl2 theora) -lnet -lsysutil -lsysmodule
 # list of directories containing libraries, this must be the top level containing
 # include and lib
 #---------------------------------------------------------------------------------
-LIBDIRS	:=
+LIBDIRS	:=	$(PORTLIBS)
 
 #---------------------------------------------------------------------------------
 # no real need to edit anything past this point unless you need to add additional
@@ -133,16 +133,6 @@ $(BUILD):
 	@[ -d $@ ] || mkdir -p $@
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 
-#---------------------------------------------------------------------------------
-clean:
-	@echo clean ...
-	@rm -fr $(BUILD) $(OUTPUT).elf $(OUTPUT).fake.self $(OUTPUT).self
-
-#---------------------------------------------------------------------------------
-run:
-	ps3load $(OUTPUT).self
-
-#---------------------------------------------------------------------------------
 else
 
 DEPENDS	:=	$(OFILES:.o=.d)
