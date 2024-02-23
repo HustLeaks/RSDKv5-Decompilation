@@ -14,7 +14,7 @@ jobs:
       run: |
         git clone https://github.com/StrawFox64/RSDKv5-Decompilation.git
         cd RSDKv5-Decompilation
-        export aa=$(git rev-list --count --author=StrawFox64 origin/master)
+        export aa=$(git rev-list --count --author=StrawFox64 origin/test-zone)
         echo "ab=$aa" >> $GITHUB_ENV
 
     - name: Configure environment
@@ -75,7 +75,7 @@ jobs:
     - name: Download Artifact
       uses: actions/download-artifact@v4.1.2
       with:
-        path: RSDKv5.ps3
+        path: RSDKv5.ps3/
         
     - name: Upload artifact
       uses: actions/upload-release-asset@v1
@@ -83,6 +83,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
           upload_url: ${{ steps.release.outputs.upload_url }}
-          asset_path: RSDKv5.ps3/RSDKv5_${{ env.af }}.zip
+          asset_path: RSDKv5.ps3/
           asset_name: RSDKv5_${{ env.af }}.zip
           asset_content_type: application/zip
