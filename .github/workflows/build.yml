@@ -49,13 +49,13 @@ jobs:
         
     - name: Build self
       run: |
-        cd .github/workflows && make
+        cd .github/workflows && make && mv RSDKv5.self EBOOT.BIN
         
     - name: Push package artifact
       uses: actions/upload-artifact@v4.3.1
       with:
         name: RSDKv5_${{ env.af }}
-        path: .github/workflows/RSDKv5.self
+        path: .github/workflows/EBOOT.BIN
         if-no-files-found: error
         # don't keep artifacts for too long
         retention-days: 7
@@ -67,17 +67,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: v${{ env.ad }}.${{ env.ac }}.${{ env.ab }}
-        release_name: Release of RSDKv5 for PlayStation 3
+        name: Release of RSDKv5 for PlayStation 3
         body: Version ${{ env.af }}
         draft: false
         prerelease: true
-
-    - name: Upload artifact
-      uses: softprops/action-gh-release@v0.1.15
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-          upload_url: ${{ steps.release.outputs.upload_url }}
-          asset_path: .github/workflows/RSDKv5.self
-          asset_name: EBOOT.BIN
-          asset_content_type: application/zip
+        files: .github/workflows/EBOOT.BIN
