@@ -10,11 +10,12 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4.1.1
 
-    - name: Count Commits
+    - name: Set a version
       run: |
         git clone https://github.com/StrawFox64/RSDKv5-Decompilation.git
         cd RSDKv5-Decompilation
         export aa=$(git rev-list --count --author=StrawFox64 origin/master)
+        ((aa -= 8))
         echo "ab=$aa" >> $GITHUB_ENV
 
     - name: Configure environment
@@ -61,31 +62,16 @@ jobs:
         retention-days: 7
 
     - name: Create Release
-      id: release
-      uses: actions/create-release@v1.1.4
+      uses: softprops/action-gh-release@v0.1.15
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: v${{ env.ad }}.${{ env.ac }}.${{ env.ab }}
-        release_name: Release of RSDKv5 for PlayStation 3
+        name: Release of RSDKv5 for PlayStation 3
         body: Version ${{ env.af }}
         draft: false
         prerelease: false
-        
-    - name: Download Artifact
-      uses: actions/download-artifact@v4.1.2
-      with:
-        name: RSDKv5_${{ env.af }}
-
-    - name: Upload artifact
-      uses: actions/upload-release-asset@v1
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-          upload_url: ${{ steps.release.outputs.upload_url }}
-          asset_path: .github/workflows/EBOOT.BIN
-          asset_name: RSDKv5_${{ env.af }}.zip
-          asset_content_type: application/zip
+        files: .github/workflows/EBOOT.BIN
 
 ## Original Workflow
 #name: Build RSDKv5
