@@ -12,6 +12,12 @@ ifeq ($(strip $(PSL1GHT)),)
 $(error "Please set PSL1GHT in your environment. export PSL1GHT=<path>")
 endif
 
+#---------------------------------------------------------------------------------
+#  TITLE, APPID, CONTENTID, ICON0, SFOXML before ppu_rules.
+#---------------------------------------------------------------------------------
+ICON0		:=	../../pkgfiles/ICON0.PNG
+SFOXML		:=	../../sfo.xml
+
 include $(PSL1GHT)/ppu_rules
 
 #---------------------------------------------------------------------------------
@@ -19,6 +25,7 @@ include $(PSL1GHT)/ppu_rules
 # BUILD is the directory where object files & intermediate files will be placed
 # SOURCES is a list of directories containing source code
 # INCLUDES is a list of directories containing extra header files
+# PKGFILES is directories containing files for pkg
 #---------------------------------------------------------------------------------
 TARGET		:=	RSDKv5
 BUILD		:=	build
@@ -48,6 +55,7 @@ INCLUDES	:=	\
 	../../dependencies/all/stb			\
 	../../RSDKv5/SonicMania/   			\
 	../../RSDKv5/SonicMania/Objects/
+PKGFILES	:=	../../pkgfiles
 
 TITLE		:=	SonicMania
 APPID		:=	CUSA07023
@@ -133,6 +141,10 @@ $(BUILD):
 	@[ -d $@ ] || mkdir -p $@
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 
+#---------------------------------------------------------------------------------
+pkg:	$(BUILD) $(OUTPUT).pkg
+
+#---------------------------------------------------------------------------------
 else
 
 DEPENDS	:=	$(OFILES:.o=.d)

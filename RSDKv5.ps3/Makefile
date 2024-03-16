@@ -7,6 +7,12 @@ ifeq ($(strip $(PSL1GHT)),)
 $(error "Please set PSL1GHT in your environment. export PSL1GHT=<path>")
 endif
 
+#---------------------------------------------------------------------------------
+#  TITLE, APPID, CONTENTID, ICON0, SFOXML before ppu_rules.
+#---------------------------------------------------------------------------------
+ICON0		:=	../pkgfiles/ICON0.PNG
+SFOXML		:=	../sfo.xml
+
 include $(PSL1GHT)/ppu_rules
 
 #---------------------------------------------------------------------------------
@@ -14,6 +20,7 @@ include $(PSL1GHT)/ppu_rules
 # BUILD is the directory where object files & intermediate files will be placed
 # SOURCES is a list of directories containing source code
 # INCLUDES is a list of directories containing extra header files
+# PKGFILES is directories containing files for pkg
 #---------------------------------------------------------------------------------
 TARGET		:=	RSDKv5
 BUILD		:=	build
@@ -43,6 +50,7 @@ INCLUDES	:=	\
 	../dependencies/all/stb			\
 	../RSDKv5/SonicMania/   		\
 	../RSDKv5/SonicMania/Objects/
+PKGFILES	:=	../pkgfiles
 
 TITLE		:=	SonicMania
 APPID		:=	CUSA07023
@@ -98,7 +106,7 @@ EXTRA_OFLAGS = -falign-functions  -falign-jumps \
 -fvect-cost-model=cheap
 
 RSDK_flags	=	-D__PS3__ -DRETRO_STANDALONE=0 -DRSDK_AUTOBUILD -DRETRO_USE_MOD_LOADER=0 -DRETRO_DISABLE_LOG
-CFLAGS		=	-g3 -O1 $(EXTRA_OFLAGS) -Wall -mcpu=cell $(MACHDEP) $(INCLUDE) $(RSDK_flags) -I$(PORTLIBS)/include
+CFLAGS		=	-g3 -O1 $(EXTRA_OFLAGS) -Wall -mcpu=cell $(MACHDEP) $(INCLUDE) $(RSDK_flags)
 CXXFLAGS	=	$(CFLAGS)
 
 LDFLAGS		=	$(MACHDEP) -Wl,-Map,$(notdir $@).map
@@ -112,7 +120,7 @@ LIBS	:=	$(shell pkg-config --libs sdl2 theora) -lnet -lsysutil -lsysmodule
 # list of directories containing libraries, this must be the top level containing
 # include and lib
 #---------------------------------------------------------------------------------
-LIBDIRS	:=
+LIBDIRS	:=	$(PORTLIBS)
 
 #---------------------------------------------------------------------------------
 # no real need to edit anything past this point unless you need to add additional
@@ -177,12 +185,10 @@ $(BUILD):
 #---------------------------------------------------------------------------------
 clean:
 	@echo clean ...
-	@rm -fr $(BUILD) $(OUTPUT).elf $(OUTPUT).fake.self $(OUTPUT).self
+	@rm -fr $(BUILD) *.elf *.self *.pkg
 
 #---------------------------------------------------------------------------------
-run:
-	ps3load $(OUTPUT).self
-
+pkg:	$(BUILD) $(OUTPUT).pkg
 
 #---------------------------------------------------------------------------------
 else

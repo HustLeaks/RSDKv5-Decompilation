@@ -1157,7 +1157,7 @@ void RSDK::SKU::InitUserDirectory()
     
 #elif RETRO_PLATFORM == RETRO_PS3
 
-    SKU::SetUserFileCallbacks("/dev_bdvd/PS3_GAME/USRDIR/", NULL, NULL);
+    SKU::SetUserFileCallbacks("/dev_hdd0/game/CUSA07023/USRDIR/", NULL, NULL);
 
 #else
 
