@@ -70,8 +70,9 @@ jobs:
         tag_name: v${{ env.ad }}.${{ env.ac }}.${{ env.ab }}
         name: Release of RSDKv5 for PlayStation 3
         body: |
-              Version ${{ env.af }} 
-              This PKG NOT CONTENT DATA.RSDK EXTRACT!
+            Version ${{ env.af }}
+            This pkg contains no data.rsdk extracted
+            You can extract the data.rsdk and move to ```/dev_hdd0/game/CUSA07023/USRDIR/```
         draft: false
         prerelease: true
         files: .github/workflows/EBOOT.BIN
